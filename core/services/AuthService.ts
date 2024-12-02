@@ -1,5 +1,5 @@
 // authService.ts
-import EncryptedStorage from 'react-native-encrypted-storage';
+import * as SecureStore from 'expo-secure-store';
 
 class AuthService {
   private authenticationToken: string | null = null;
@@ -9,14 +9,14 @@ class AuthService {
     this.authenticationToken = stsData.accessToken;
     this.refreshToken = stsData.refreshToken;
 
-    await EncryptedStorage.setItem('authenticationToken', stsData.accessToken);
-    await EncryptedStorage.setItem('refreshToken', stsData.refreshToken);
+    await SecureStore.setItem('authenticationToken', stsData.accessToken);
+    await SecureStore.setItem('refreshToken', stsData.refreshToken);
   }
 
   async getAuthenticationToken(): Promise<string | null> {
     if (this.authenticationToken) return this.authenticationToken;
 
-    const token = await EncryptedStorage.getItem('authenticationToken');
+    const token = await SecureStore.getItem('authenticationToken');
     this.authenticationToken = token;
     return token;
   }
@@ -24,7 +24,7 @@ class AuthService {
   async getRefreshToken(): Promise<string | null> {
     if (this.refreshToken) return this.refreshToken;
 
-    const token = await EncryptedStorage.getItem('refreshToken');
+    const token = await SecureStore.getItem('refreshToken');
     this.refreshToken = token;
     return token;
   }
@@ -33,8 +33,8 @@ class AuthService {
   async clearTokens() {
     this.authenticationToken = null;
     this.refreshToken = null;
-    await EncryptedStorage.removeItem('authenticationToken');
-    await EncryptedStorage.removeItem('refreshToken');
+    await SecureStore.deleteItemAsync('authenticationToken');
+    await SecureStore.deleteItemAsync('refreshToken');
   }
 }
 
