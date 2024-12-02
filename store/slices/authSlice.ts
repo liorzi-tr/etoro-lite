@@ -3,7 +3,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { Credentials, isLoginMissingScopes, isTwoFactorResponse } from '../../core/@etoro/types/auth';
 import AuthService from '../../core/services/AuthService';
 import { setTwoFactorRequired } from './twoFactorSlice';
-import loginSerivce from '../../core/services/loginSerivce';
+import loginSerivce from '../../core/services/LoginSerivce';
 
 interface AuthState {
   isAuthenticated: boolean;

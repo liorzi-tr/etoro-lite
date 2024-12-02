@@ -1,7 +1,7 @@
 // twoFactorSlice.ts
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import loginSerivce from '../../core/services/loginSerivce';
 import { TwoFactorResponse } from '../../core/@etoro/types/auth';
+import loginSerivce from '../../core/services/LoginSerivce';
 
 interface TwoFactorState {
   required: boolean;

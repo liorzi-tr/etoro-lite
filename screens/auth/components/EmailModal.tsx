@@ -14,12 +14,11 @@ import PlanixIcon from '../../../core/icons/EtoroIcon';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../../store/store';
-import { setUser } from '../../../store/slices/userSlice';
 import { EtoroRoutes } from '../../../core/@etoro/types';
 import { selectTheme } from '../../../store/selectors/themeSelectors';
 import { selectUser, selectUserStatus } from '../../../store/selectors/userSelectors';
 import { Credentials, isLoginMissingScopes, isTwoFactorResponse, LoginResponse } from '../../../core/@etoro/types/auth';
-import LoginService from '../../../core/services/loginSerivce';
+import LoginService from '../../../core/services/LoginSerivce';
 
 interface EmailModalProps {
   navigation: any;
