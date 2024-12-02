@@ -57,7 +57,7 @@ export default function BottomTabs() {
 const styles = StyleSheet.create({
   logo: {
     width: 100,
-    height: 40,
+    height: 90,
     resizeMode: 'contain',
   },
 });
