@@ -1,5 +1,4 @@
 // LoginService.ts
-
 import { Credentials, LoginResponse, TwoFactorResponse } from "../@etoro/types/auth";
 import axiosInstance, { InterceptorConfig } from "../utils/api";
 import AuthService from "./AuthService";
@@ -22,7 +21,6 @@ class LoginService {
 
     try {
       await this.maintenanceCheck(); // Implement this method
-
       loginPromise = loginPromise || this._authenticateUserBeforeLogin({
         loginIdentifier: credentials.username,
         password: credentials.password,

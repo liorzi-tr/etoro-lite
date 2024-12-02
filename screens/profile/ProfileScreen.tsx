@@ -9,17 +9,14 @@ import {
 import { globalStyles } from '../../styles/constants';
 import SectionButton from './components/SectionButton';
 import BackgroundGradient from '../../styles/GradientBackground';
-import { signOut } from 'firebase/auth';
 import { useDispatch, useSelector } from 'react-redux';
 import { extractNameFromEmail } from '../../core/utils/extractEmail';
 import { EtoroRoutes, EtoroScreenProps } from '../../core/@etoro/types';
 import OuterCard from '../../core/components/atoms/OuterCard';
 import { selectTheme } from '../../store/selectors/themeSelectors';
-import { selectUser } from '../../store/selectors/userSelectors';
 
 export default function ProfileScreen({ navigation }: EtoroScreenProps<EtoroRoutes.Profile>) {
   const theme = useSelector(selectTheme);
-  const user = useSelector(selectUser);
   const dispatch = useDispatch();
 
   const handlePress = (): void => {
@@ -44,11 +41,7 @@ export default function ProfileScreen({ navigation }: EtoroScreenProps<EtoroRout
       <ScrollView style={globalStyles.container}>
         <View>
           <Text style={[styles.title, { color: theme.textColor }]}>
-            Hi{' '}
-            {!user?.displayName
-              ? extractNameFromEmail(user?.email)
-              : user?.displayName}
-            !
+            Hi!
           </Text>
         </View>
         <View style={styles.avatarSection}>
@@ -59,9 +52,7 @@ export default function ProfileScreen({ navigation }: EtoroScreenProps<EtoroRout
             /> */}
           </Pressable>
           <Text style={[styles.username, { color: theme.textColor }]}>
-            {!user?.displayName
-              ? extractNameFromEmail(user?.email)
-              : user?.displayName}
+            Username
           </Text>
         </View>
 
