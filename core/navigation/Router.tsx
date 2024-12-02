@@ -17,8 +17,8 @@ const Stack = createNativeStackNavigator<EtoroParamList>();
 export default function Router() {
   const dispatch = useDispatch<AppDispatch>();
   const theme = useSelector(selectTheme);
-  const { user } = useSelector((state: RootState) => state.user);
-  useAuthListener();
+  const isAuthenticated = useSelector<RootState>(state => state.auth.isAuthenticated);
+  const twoFactorRequired = useSelector<RootState>(state => state.twoFactor.required);
 
   useEffect(() => {
     dispatch(initializeTheme());
@@ -31,7 +31,7 @@ export default function Router() {
         backgroundColor: theme.bottomBackgroundColor,
       }}
     >
-      {user ? (
+      {isAuthenticated ? (
         <NavigationContainer>
           <Stack.Navigator initialRouteName={EtoroRoutes.BottomTabs} screenOptions={{
             contentStyle: { backgroundColor: theme.bottomBackgroundColor },
@@ -41,11 +41,6 @@ export default function Router() {
               component={BottomTabs}
               options={{ headerShown: false }}
             />
-            {/* <Stack.Screen
-              name={EtoroRoutes.PlanixStack}
-              component={PlanixStackScreen}
-              options={{ headerShown: false }}
-            /> */}
           </Stack.Navigator>
         </NavigationContainer>
       ) : (
