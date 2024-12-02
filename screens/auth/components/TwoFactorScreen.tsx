@@ -2,12 +2,13 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../store/store";
 import { verifyTwoFactor } from "../../../store/slices/twoFactorSlice";
-import { setAuthenticated } from "../../../store/slices/authSlice";
-import { ActivityIndicator, Button, Text, TextInput, View } from "react-native";
+import { ActivityIndicator, Text, TextInput, View } from "react-native";
+import { EtoroRoutes, EtoroScreenProps } from "../../../core/@etoro/types";
+import EtButton from "../../../core/components/atoms/EtButton";
+import { setAuthenticatedTrue } from "../../../store/slices/authSlice";
 
-
-export default function TwoFactorScreen({ navigation }: any) {
-  const [otp, setOtp] = useState('');
+export default function TwoFactorScreen({ navigation, route }: EtoroScreenProps<EtoroRoutes.TwoFactorScreen>) {
+  const [otp, setOtp] = useState<string>('');
   const dispatch = useDispatch<AppDispatch>();
   const twoFactorState = useSelector((state: RootState) => state.twoFactor);
 
@@ -18,14 +19,14 @@ export default function TwoFactorScreen({ navigation }: any) {
       twoFAData: twoFactorState.data,
       otp,
     };
+    console.log('Verification data:', verificationData);
 
     const resultAction = await dispatch(verifyTwoFactor(verificationData));
     if (verifyTwoFactor.fulfilled.match(resultAction)) {
-      dispatch(setAuthenticated(true));
-      navigation.reset({
-        index: 0,
-        routes: [{ name: 'AuthScreen' }],
-      });
+      console.log('Two factor verification successful');
+
+      dispatch(setAuthenticatedTrue());
+      navigation.navigate(EtoroRoutes.Profile);
     }
   };
 
@@ -40,8 +41,8 @@ export default function TwoFactorScreen({ navigation }: any) {
         keyboardType="numeric"
         style={{ marginBottom: 8, borderBottomWidth: 1 }}
       />
-      <Button
-        title="Verify"
+      <EtButton
+        title="Continue"
         onPress={handleVerify}
         disabled={twoFactorState.status === 'loading'}
       />

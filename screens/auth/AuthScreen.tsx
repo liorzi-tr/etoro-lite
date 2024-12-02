@@ -50,22 +50,6 @@ export default function AuthScreen({ navigation }: EtoroScreenProps<EtoroRoutes.
             entering={FadeInDown.delay(800).duration(700)}
           >
             <EtButton
-              title="Continue with Google"
-              onPress={() => { }}
-              color={'#fff'}
-              textColor={theme.textColor}
-              border={true}
-              style={styles.button}
-            />
-            <EtButton
-              title="Continue with Apple"
-              onPress={() => { }}
-              //color={'#fff'}
-              textColor={theme.textColor}
-              border={true}
-              style={styles.button}
-            />
-            <EtButton
               title="Continue with Email"
               color={theme.primaryColor}
               onPress={handlePress.bind(null, EtoroRoutes.Email)}
@@ -106,9 +90,9 @@ const styles = StyleSheet.create({
   },
   footer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 50,
+    // justifyContent: 'center',
+    // alignItems: 'center',
+    // marginBottom: 50,
   },
   buttonContainer: {
     width: '100%',

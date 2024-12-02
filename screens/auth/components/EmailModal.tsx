@@ -8,7 +8,7 @@ import {
   View,
 } from 'react-native';
 import { globalStyles } from '../../../styles/constants';
-import PlxButton from '../../../core/components/atoms/EtButton';
+import EtButton from '../../../core/components/atoms/EtButton';
 import Input from '../../../core/components/atoms/Input';
 import PlanixIcon from '../../../core/icons/EtoroIcon';
 import { useEffect, useState } from 'react';
@@ -19,23 +19,21 @@ import { selectTheme } from '../../../store/selectors/themeSelectors';
 import { selectUser, selectUserStatus } from '../../../store/selectors/userSelectors';
 import { Credentials, isLoginMissingScopes, isTwoFactorResponse, LoginResponse } from '../../../core/@etoro/types/auth';
 import LoginService from '../../../core/services/LoginSerivce';
+import { setTwoFactorRequired } from '../../../store/slices/twoFactorSlice';
 
 interface EmailModalProps {
   navigation: any;
 }
 
 const EmailModal = ({ navigation }: EmailModalProps) => {
+  const dispatch = useDispatch<AppDispatch>();
   const theme = useSelector(selectTheme);
   const [isProcessing, setIsProcessing] = useState(false);
   const [credentials, setCredentials] = useState<Credentials>({ username: '', password: '' });
-  const [currentState, setCurrentState] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [twoStepData, setTwoStepData] = useState<any>(null);
 
   const handleLogin = async () => {
     if (isProcessing) return;
-
-    setIsProcessing(true);
     setErrorMessage(null);
 
     try {
@@ -50,34 +48,15 @@ const EmailModal = ({ navigation }: EmailModalProps) => {
 
   const loginSuccessHandler = async (data: LoginResponse) => {
     if (isTwoFactorResponse(data)) {
-      setTwoStepData({ ...data });
-      setCurrentState('TwoStepScreen');
-      // Implement two-factor authentication flow
+      dispatch(setTwoFactorRequired(data));
+      navigation.goBack();
+      navigation.navigate(EtoroRoutes.TwoFactorScreen);
       return;
     }
 
     if (isLoginMissingScopes(data)) {
       // Handle missing scopes
-      setCurrentState('MissingScopesScreen');
       return;
-    }
-
-    try {
-      await exchangeToken(data);
-      // Navigate to the next screen or update UI accordingly
-    } catch (error) {
-      loginErrorHandler(error);
-    }
-  };
-
-  const exchangeToken = async (data: LoginResponse) => {
-    try {
-      const stsData = await LoginService.refreshToken(data);
-      // Save username locally if needed
-      // localStorage.setItem('lastUsername', credentials.username);
-      // Proceed with authenticated user
-    } catch (error) {
-      throw error;
     }
   };
 
@@ -133,9 +112,8 @@ const EmailModal = ({ navigation }: EmailModalProps) => {
         keyboardVerticalOffset={Platform.OS === 'ios' ? 10 : 0}
         style={{ marginTop: 'auto' }}
       >
-        <PlxButton
+        <EtButton
           title="Log in"
-          pill={true}
           onPress={handleLogin}
           style={styles.button}
         />

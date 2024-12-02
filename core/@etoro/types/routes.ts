@@ -1,3 +1,5 @@
+import { TwoFactorResponse } from "./auth";
+
 export type EtoroParamList = {
   Profile: any;
   Account: any;
@@ -6,6 +8,7 @@ export type EtoroParamList = {
   BottomTabs: any;
   AuthScreen: any;
   AuthStack: any;
+  TwoFactorScreen: TwoFactorResponse;
   OnboardingStack: any;
   FirstOnboarding: any;
   SecondOnboarding: any;
@@ -20,6 +23,7 @@ export enum EtoroRoutes {
   Notifications = 'Notifications',
   AuthScreen = 'AuthScreen',
   AuthStack = 'AuthStack',
+  TwoFactorScreen = 'TwoFactorScreen',
   BottomTabs = 'BottomTabs',
   OnboardingStack = 'OnboardingStack',
   FirstOnboarding = 'FirstOnboarding',

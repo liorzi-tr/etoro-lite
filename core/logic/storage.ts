@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getDeviceId } from '../utils/getDeviceId';
 
 export const saveEmailToLocalStorage = async (email: string): Promise<void> => {
   try {
@@ -25,3 +26,21 @@ export const clearEmailFromLocalStorage = async (): Promise<void> => {
     console.error('Failed to clear email from secure storage', error);
   }
 };
+
+export const setDeviceId = async (): Promise<void> => {
+  try {
+    await AsyncStorage.setItem('X-Sts-Deviceid', getDeviceId());
+  } catch (error) {
+    console.error('Failed to save device ID to secure storage', error);
+  }
+}
+
+export const getDeviceIdFromLocalStorage = async (): Promise<string | null> => {
+  try {
+    const deviceId = await AsyncStorage.getItem('X-Sts-Deviceid');
+    return deviceId;
+  } catch (error) {
+    console.error('Failed to retrieve device ID from secure storage', error);
+    return null;
+  }
+}

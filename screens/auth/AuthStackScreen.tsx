@@ -3,6 +3,7 @@ import EmailModalScreen from './components/EmailModal';
 import AuthScreen from './AuthScreen';
 import SignupScreen from './components/SignupScreen';
 import { EtoroParamList, EtoroRoutes } from '../../core/@etoro/types';
+import TwoFactorScreen from './components/TwoFactorScreen';
 
 const Stack = createNativeStackNavigator<EtoroParamList>();
 
@@ -22,6 +23,13 @@ const AuthStackScreen = () => {
         options={{
           presentation: 'fullScreenModal',
           headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name={EtoroRoutes.TwoFactorScreen}
+        component={TwoFactorScreen}
+        options={{
+          // headerShown: false,
         }}
       />
       <Stack.Screen
