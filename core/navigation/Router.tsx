@@ -4,7 +4,6 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import BottomTabs from './BottomTabs';
 
 import OnboardingStackScreen from '../../screens/onboarding/OnboardingStackScreen';
-import useAuthListener from '../hooks/useAuthListener';
 import { EtoroParamList, EtoroRoutes } from '../@etoro/types';
 import { selectTheme } from '../../store/selectors/themeSelectors';
 import { useEffect } from 'react';

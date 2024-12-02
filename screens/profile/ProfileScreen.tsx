@@ -11,12 +11,10 @@ import SectionButton from './components/SectionButton';
 import BackgroundGradient from '../../styles/GradientBackground';
 import { signOut } from 'firebase/auth';
 import { useDispatch, useSelector } from 'react-redux';
-import { clearUser } from '../../store/slices/userSlice';
 import { extractNameFromEmail } from '../../core/utils/extractEmail';
 import { EtoroRoutes, EtoroScreenProps } from '../../core/@etoro/types';
 import OuterCard from '../../core/components/atoms/OuterCard';
 import { selectTheme } from '../../store/selectors/themeSelectors';
-import { auth } from '../../firebase';
 import { selectUser } from '../../store/selectors/userSelectors';
 
 export default function ProfileScreen({ navigation }: EtoroScreenProps<EtoroRoutes.Profile>) {
@@ -28,16 +26,16 @@ export default function ProfileScreen({ navigation }: EtoroScreenProps<EtoroRout
     navigation.navigate(EtoroRoutes.Account);
   }
 
-  const handleLogout = (): void => {
-    signOut(auth)
-      .then(() => {
-        console.log('Signed out');
-        dispatch(clearUser());
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
+  // const handleLogout = (): void => {
+  //   signOut(auth)
+  //     .then(() => {
+  //       console.log('Signed out');
+  //       dispatch(clearUser());
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //     });
+  // };
   return (
     <BackgroundGradient
       topColor={theme.topBackgroundColor}
@@ -94,7 +92,7 @@ export default function ProfileScreen({ navigation }: EtoroScreenProps<EtoroRout
             color={theme.textColor}
             iconLeftSize={30}
             iconRightSize={36}
-            onPress={handleLogout}
+            onPress={() => {}}
           ></SectionButton>
         </OuterCard>
       </ScrollView>
