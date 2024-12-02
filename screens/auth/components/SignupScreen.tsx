@@ -9,10 +9,9 @@ import {
   StyleSheet,
 } from 'react-native';
 import { globalStyles } from '../../../styles/constants';
-import PlxButton from '../../../core/components/atoms/EtButton';
+import EtButton from '../../../core/components/atoms/EtButton';
 import Input from '../../../core/components/atoms/Input';
-import PlanixIcon from '../../../core/icons/EtoroIcon';
-import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
+import EtoroIcon from '../../../core/icons/EtoroIcon';
 import { selectTheme } from '../../../store/selectors/themeSelectors';
 import { useSelector } from 'react-redux';
 
@@ -25,25 +24,24 @@ const SignupScreen = ({ navigation }: SignupScreenProps) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const auth = getAuth();
 
-  const handleSignUp = () => {
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        console.log('User created:', user);
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.error(errorCode, errorMessage);
-      });
-  };
+  // const handleSignUp = () => {
+  //   createUserWithEmailAndPassword(auth, email, password)
+  //     .then((userCredential) => {
+  //       const user = userCredential.user;
+  //       console.log('User created:', user);
+  //     })
+  //     .catch((error) => {
+  //       const errorCode = error.code;
+  //       const errorMessage = error.message;
+  //       console.error(errorCode, errorMessage);
+  //     });
+  // };
 
   return (
     <View style={[styles.container, { backgroundColor: theme.topBackgroundColor }]}>
       <Pressable style={styles.close} onPress={() => navigation.goBack()}>
-        <PlanixIcon
+        <EtoroIcon
           iconName="close"
           size={32}
           color={theme.primaryColor}
@@ -84,7 +82,7 @@ const SignupScreen = ({ navigation }: SignupScreenProps) => {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 10 : 0}
       >
-        <PlxButton title="Signup" pill={true} onPress={handleSignUp} style={styles.button} />
+        <EtButton title="Signup" pill={true} onPress={() => {}} style={styles.button} />
       </KeyboardAvoidingView>
     </View>
   );
