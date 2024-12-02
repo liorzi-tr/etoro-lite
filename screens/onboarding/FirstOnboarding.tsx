@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text } from 'react-native';
+import { Image, StyleSheet, Text, ScrollView } from 'react-native';
 import { globalStyles } from '../../styles/constants';
 import Animated, {
   FadeIn,
@@ -12,15 +12,19 @@ import PlxButton from '../../core/components/atoms/EtButton';
 import { EtoroRoutes, EtoroScreenProps } from '../../core/@etoro/types';
 import { useSelector } from 'react-redux';
 import { selectTheme } from '../../store/selectors/themeSelectors';
+import { useTranslation } from 'react-i18next';
 
 export default function FirstOnboarding({ navigation }: EtoroScreenProps<EtoroRoutes.FirstOnboarding>) {
   const theme = useSelector(selectTheme);
+  const {t} = useTranslation();
 
   const handlePress = () => {
     navigation.navigate(EtoroRoutes.SecondOnboarding);
   };
 
   return (
+    <ScrollView>
+
     <Animated.View style={[styles.container, { backgroundColor: theme.bottomBackgroundColor }]}>
       <Animated.View
         entering={FadeInLeft.duration(800)}
@@ -36,7 +40,7 @@ export default function FirstOnboarding({ navigation }: EtoroScreenProps<EtoroRo
             style={{ height: 40, width: 100, alignSelf: 'center' }}
           />
         </Animated.View>
-        <Text style={[styles.title, { color: theme.textColor }]}>Boost your worth</Text>
+        <Text style={[styles.title, { color: theme.textColor }]}>{t('onboardingScreens.nonUS_screen1_body')}</Text>
       </Animated.View>
       <Animated.View
         style={styles.imageContainer}
@@ -52,9 +56,11 @@ export default function FirstOnboarding({ navigation }: EtoroScreenProps<EtoroRo
         entering={FadeInLeft.delay(800).duration(800)}
         exiting={FadeOutLeft.duration(800)}
       >
-        <PlxButton title="Next" onPress={handlePress} textColor={theme.buttonTextColor} style={styles.button} />
+        <PlxButton title={t('onboardingScreens.nextButton')} onPress={handlePress} textColor={theme.buttonTextColor} style={styles.button} />
       </Animated.View>
     </Animated.View>
+    </ScrollView>
+
   );
 }
 

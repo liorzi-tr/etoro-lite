@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, Text, View, ScrollView } from 'react-native';
 import { globalStyles } from '../../styles/constants';
 import BackgroundGradient from '../../styles/GradientBackground';
 import EtButton from '../../core/components/atoms/EtButton';
@@ -10,15 +10,14 @@ import Animated, {
 import { EtoroRoutes, EtoroScreenProps } from '../../core/@etoro/types';
 import { selectTheme } from '../../store/selectors/themeSelectors';
 import { useSelector } from 'react-redux';
-
 export default function AuthScreen({ navigation }: EtoroScreenProps<EtoroRoutes.AuthScreen | EtoroRoutes.AuthStack>) {
   const theme = useSelector(selectTheme);
 
   const handlePress = (route: any): void => {
     navigation.navigate(route);
   };
-
   return (
+    <ScrollView>
     <BackgroundGradient
       topColor={theme.topBackgroundColor}
       bottomColor={theme.bottomBackgroundColor}
@@ -61,7 +60,7 @@ export default function AuthScreen({ navigation }: EtoroScreenProps<EtoroRoutes.
             <EtButton
               title="Continue with Apple"
               onPress={() => { }}
-              color={'#fff'}
+              //color={'#fff'}
               textColor={theme.textColor}
               border={true}
               style={styles.button}
@@ -76,6 +75,7 @@ export default function AuthScreen({ navigation }: EtoroScreenProps<EtoroRoutes.
         </View>
       </Animated.View>
     </BackgroundGradient>
+    </ScrollView>
   );
 }
 

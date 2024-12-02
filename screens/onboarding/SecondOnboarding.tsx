@@ -13,12 +13,13 @@ import PlxButton from '../../core/components/atoms/EtButton';
 import { EtoroRoutes, EtoroScreenProps } from '../../core/@etoro/types';
 import { useSelector } from 'react-redux';
 import { selectTheme } from '../../store/selectors/themeSelectors';
+import { useTranslation } from 'react-i18next';
 
 export default function SecondOnboarding({
   navigation,
 }: EtoroScreenProps<EtoroRoutes.SecondOnboarding>) {
   const theme = useSelector(selectTheme);
-
+    const {t} = useTranslation();
   const handlePress = () => {
     navigation.navigate(EtoroRoutes.AuthStack);
   };
@@ -39,7 +40,7 @@ export default function SecondOnboarding({
             style={{ height: 40, width: 100, alignSelf: 'center' }}
           />
         </Animated.View>
-        <Text style={[styles.title, { color: theme.textColor }]}>All your trades, in one place</Text>
+        <Text style={[styles.title, { color: theme.textColor }]}>{t('onboardingScreens.nonUS_screen3_body')}</Text>
       </Animated.View>
       <Animated.View
         style={styles.imageContainer}
@@ -55,7 +56,7 @@ export default function SecondOnboarding({
         entering={FadeInLeft.delay(800).duration(800)}
         exiting={FadeOutLeft.duration(800)}
       >
-        <PlxButton title="Next" onPress={handlePress} textColor={theme.buttonTextColor} style={styles.button} />
+        <PlxButton title={t('onboardingScreens.nextButton')} onPress={handlePress} textColor={theme.buttonTextColor} style={styles.button} />
       </Animated.View>
     </Animated.View>
   );
