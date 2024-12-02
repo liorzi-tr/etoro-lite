@@ -10,20 +10,16 @@ import {
 import { globalStyles } from '../../../styles/constants';
 import PlxButton from '../../../core/components/atoms/EtButton';
 import Input from '../../../core/components/atoms/Input';
-import PlanixIcon from '../../../core/icons/PlanixIcon';
+import PlanixIcon from '../../../core/icons/EtoroIcon';
 import { useEffect, useState } from 'react';
-import {
-  getAuth,
-  signInWithEmailAndPassword,
-  User,
-  UserCredential,
-} from 'firebase/auth';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../../store/store';
 import { setUser } from '../../../store/slices/userSlice';
 import { EtoroRoutes } from '../../../core/@etoro/types';
 import { selectTheme } from '../../../store/selectors/themeSelectors';
 import { selectUser, selectUserStatus } from '../../../store/selectors/userSelectors';
+import { Credentials, isLoginMissingScopes, isTwoFactorResponse, LoginResponse } from '../../../core/@etoro/types/auth';
+import LoginService from '../../../core/services/loginSerivce';
 
 interface EmailModalProps {
   navigation: any;
@@ -31,32 +27,64 @@ interface EmailModalProps {
 
 const EmailModal = ({ navigation }: EmailModalProps) => {
   const theme = useSelector(selectTheme);
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const user = useSelector(selectUser);
-  const status = useSelector(selectUserStatus);
-  const dispatch = useDispatch<AppDispatch>();
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [credentials, setCredentials] = useState<Credentials>({ username: '', password: '' });
+  const [currentState, setCurrentState] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [twoStepData, setTwoStepData] = useState<any>(null);
 
-  useEffect(() => {
-    if (user) {
-      navigation.navigate(EtoroRoutes.CreateEvent);
+  const handleLogin = async () => {
+    if (isProcessing) return;
+
+    setIsProcessing(true);
+    setErrorMessage(null);
+
+    try {
+      const data = await LoginService.authenticateUserBeforeLogin(credentials);
+      await loginSuccessHandler(data);
+    } catch (error) {
+      loginErrorHandler(error);
+    } finally {
+      setIsProcessing(false);
     }
-  }, [status, user, dispatch, navigation]);
+  };
 
-  const handleSignInWithEmailAndPassword = () => {
-    const auth = getAuth();
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential: UserCredential) => {
-        const user: User = userCredential.user;
-        dispatch(setUser(user));
-        navigation.goBack();
-        navigation.navigate(EtoroRoutes.CreateEvent);
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.error(errorCode, errorMessage);
-      });
+  const loginSuccessHandler = async (data: LoginResponse) => {
+    if (isTwoFactorResponse(data)) {
+      setTwoStepData({ ...data });
+      setCurrentState('TwoStepScreen');
+      // Implement two-factor authentication flow
+      return;
+    }
+
+    if (isLoginMissingScopes(data)) {
+      // Handle missing scopes
+      setCurrentState('MissingScopesScreen');
+      return;
+    }
+
+    try {
+      await exchangeToken(data);
+      // Navigate to the next screen or update UI accordingly
+    } catch (error) {
+      loginErrorHandler(error);
+    }
+  };
+
+  const exchangeToken = async (data: LoginResponse) => {
+    try {
+      const stsData = await LoginService.refreshToken(data);
+      // Save username locally if needed
+      // localStorage.setItem('lastUsername', credentials.username);
+      // Proceed with authenticated user
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const loginErrorHandler = (error: any) => {
+    setErrorMessage('Login failed. Please try again.');
+    // Additional error handling based on error object
   };
 
   const handleSignUp = () => {
@@ -86,15 +114,15 @@ const EmailModal = ({ navigation }: EmailModalProps) => {
             style={[styles.input, { color: theme.textColor, borderColor: theme.inputBorderColor, backgroundColor: theme.inputBackgroundColor }]}
             placeholder="Email"
             keyboardType="email-address"
-            value={email}
-            onChangeText={(text) => setEmail(text)}
+            value={credentials.username}
+            onChangeText={(text) => setCredentials({ ...credentials, username: text })}
           />
           <Input
             style={styles.input}
             placeholder="Password"
             secureTextEntry={true}
-            value={password}
-            onChangeText={(text) => setPassword(text)}
+            value={credentials.password}
+            onChangeText={(text) => setCredentials({ ...credentials, password: text })}
           />
         </View>
         <Pressable onPress={handleSignUp}>
@@ -109,7 +137,7 @@ const EmailModal = ({ navigation }: EmailModalProps) => {
         <PlxButton
           title="Log in"
           pill={true}
-          onPress={handleSignInWithEmailAndPassword}
+          onPress={handleLogin}
           style={styles.button}
         />
       </KeyboardAvoidingView>

@@ -11,7 +11,7 @@ import {
 import { globalStyles } from '../../../styles/constants';
 import PlxButton from '../../../core/components/atoms/EtButton';
 import Input from '../../../core/components/atoms/Input';
-import PlanixIcon from '../../../core/icons/PlanixIcon';
+import PlanixIcon from '../../../core/icons/EtoroIcon';
 import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
 import { selectTheme } from '../../../store/selectors/themeSelectors';
 import { useSelector } from 'react-redux';

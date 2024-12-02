@@ -1,6 +1,5 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Image, Platform, StatusBar, StyleSheet } from 'react-native';
-import PlanixIcon from '../icons/PlanixIcon';
+import { Image, StatusBar, StyleSheet } from 'react-native';
 import TabIcon from '../components/atoms/TabIcon';
 import TabLabel from '../components/atoms/TabLabel';
 import ProfileStackNav from '../../screens/profile/ProfileStackNav';

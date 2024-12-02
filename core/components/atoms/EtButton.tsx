@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { Text, StyleSheet, Pressable, Animated } from 'react-native';
-import PlanixIcon from '../../icons/PlanixIcon';
+import EtoroIcon from '../../icons/EtoroIcon';
 import { useSelector } from 'react-redux';
 import { selectTheme } from '../../../store/selectors/themeSelectors';
 
@@ -63,7 +63,7 @@ const EtButton = ({
         style={{  }}
 
       >
-        {icon && <PlanixIcon iconName={icon} size={20} color={iconColor} />}
+        {icon && <EtoroIcon iconName={icon} size={20} color={iconColor} />}
         <Text style={{ ...styles.buttonText, color: textColor ? textColor : theme.buttonTextColor }}>{title}</Text>
       </Pressable>
     </Animated.View>

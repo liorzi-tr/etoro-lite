@@ -1,5 +1,4 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../store/store';
+import { AppDispatch, RootState } from '../../store/store';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import BottomTabs from './BottomTabs';
@@ -9,19 +8,20 @@ import useAuthListener from '../hooks/useAuthListener';
 import { EtoroParamList, EtoroRoutes } from '../@etoro/types';
 import { selectTheme } from '../../store/selectors/themeSelectors';
 import { useEffect } from 'react';
-import { initializeTheme } from '../../store/actions/themeActions';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { initializeTheme } from '../../store/slices/themeSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 const Stack = createNativeStackNavigator<EtoroParamList>();
 
 export default function Router() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const theme = useSelector(selectTheme);
   const { user } = useSelector((state: RootState) => state.user);
   useAuthListener();
 
   useEffect(() => {
-    dispatch<any>(initializeTheme());
+    dispatch(initializeTheme());
   }, [dispatch]);
 
   return (

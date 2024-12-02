@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from 'react';
 import { Pressable, Text, View, StyleSheet } from 'react-native';
-import PlanixIcon from '../../../core/icons/PlanixIcon';
+import PlanixIcon from '../../../core/icons/EtoroIcon';
 
 interface Props {
   label: string;

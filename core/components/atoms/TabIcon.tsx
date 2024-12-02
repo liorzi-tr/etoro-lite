@@ -1,5 +1,5 @@
 import { Platform, View } from 'react-native';
-import PlanixIcon from '../../icons/PlanixIcon';
+import PlanixIcon from '../../icons/EtoroIcon';
 import { selectTheme } from '../../../store/selectors/themeSelectors';
 import { useSelector } from 'react-redux';
 
