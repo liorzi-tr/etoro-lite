@@ -10,6 +10,7 @@ import { useEffect } from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { initializeTheme } from '../../store/slices/themeSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import { checkAuthentication } from '../../store/slices/authSlice';
 
 const Stack = createNativeStackNavigator<EtoroParamList>();
 
@@ -20,6 +21,7 @@ export default function Router() {
   const twoFactorRequired = useSelector<RootState>(state => state.twoFactor.required);
 
   useEffect(() => {
+    dispatch(checkAuthentication());
     dispatch(initializeTheme());
   }, [dispatch]);
 

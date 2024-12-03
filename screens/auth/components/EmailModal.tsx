@@ -59,9 +59,9 @@ const EmailModal = ({ navigation }: EmailModalProps) => {
       // Handle missing scopes
       return;
     }
-    AuthService.setSts(data);
-    navigation.goBack();
+    AuthService.setRefreshToken(data);
     await LoginService.refreshToken();
+    navigation.goBack();
     dispatch(setAuthenticatedTrue());
   };
 

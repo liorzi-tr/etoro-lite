@@ -17,6 +17,25 @@ const initialState: AuthState = {
   error: null,
 };
 
+// Async thunk to check authentication on app startup
+export const checkAuthentication = createAsyncThunk(
+  'auth/checkAuthentication',
+  async () => {
+    const accessToken = await AuthService.getAccessToken();
+    if (accessToken) {
+      setAuthenticatedTrue();
+    }
+    else {
+      const refreshToken = await AuthService.getRefreshToken();
+      if (refreshToken) {
+        await loginSerivce.refreshToken();
+      }
+    }
+    setAuthenticatedFalse();
+  }
+);
+
+
 // Async thunk for login
 export const login = createAsyncThunk(
   'auth/login',
@@ -62,15 +81,15 @@ const authSlice = createSlice({
   },
   extraReducers: builder => {
     builder
-      .addCase(login.pending, state => {
+      .addCase(checkAuthentication.pending, state => {
         state.status = 'loading';
         state.error = null;
       })
-      .addCase(login.fulfilled, state => {
+      .addCase(checkAuthentication.fulfilled, state => {
         state.status = 'succeeded';
         state.isAuthenticated = true;
       })
-      .addCase(login.rejected, (state, action) => {
+      .addCase(checkAuthentication.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.payload as string;
         state.isAuthenticated = false;
