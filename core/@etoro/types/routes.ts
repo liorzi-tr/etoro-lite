@@ -16,6 +16,7 @@ export type EtoroParamList = {
   SecondOnboarding: any;
   Email: any;
   SignUp: any;
+  MarketPage:{instrument:string};
 };
 
 export enum EtoroRoutes {

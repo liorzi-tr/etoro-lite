@@ -1,14 +1,18 @@
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, Pressable } from 'react-native';
 import { PositionGroup } from '../portfolioList';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { EtoroParamList, EtoroRoutes } from '../../../core/@etoro/types/routes';
 
 interface RenderItemProps {
   item: PositionGroup;
+  onPress:()=>void
 }
 
-export const renderMirrorItem = ({ item }: RenderItemProps) => {
+export  default function renderMirrorItem({ item, onPress }: RenderItemProps) {
   const { instrument, positions, totalUnits } = item;
 
   return (
+    <Pressable onPress={onPress}>
     <View style={styles.container}>
       {/* Instrument Header */}
       <View style={styles.header}>
@@ -42,6 +46,7 @@ export const renderMirrorItem = ({ item }: RenderItemProps) => {
         </Text>
       </View>
     </View>
+    </Pressable>
   );
 };
 

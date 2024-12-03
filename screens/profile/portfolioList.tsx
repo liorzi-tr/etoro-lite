@@ -1,5 +1,5 @@
 import {  ActivityIndicator, FlatList, StyleSheet, View,Text } from "react-native";
-import { renderMirrorItem } from './components/miroritem';
+import renderMirrorItem from './components/miroritem';
 import { EtoroRoutes, EtoroScreenProps } from '../../core/@etoro/types';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { fetchInstruments, ResultInstrument } from '../../core/services/instrumentsRepo';
@@ -71,6 +71,7 @@ const sampleMirrors: Mirror[] = [
 
 export default function Portfolio({ navigation }: EtoroScreenProps<EtoroRoutes.Portfolio>){
     const  queryClient = useQueryClient();
+    
     const {isLoading,error,data} = useQuery({queryKey:['instrumentMeta'], queryFn:async ()=>{
         const [instruments, loginData] = await Promise.all([
             fetchInstruments(),
@@ -98,7 +99,9 @@ export default function Portfolio({ navigation }: EtoroScreenProps<EtoroRoutes.P
  
     <FlatList
       data={data}
-      renderItem={renderMirrorItem}
+      renderItem={(item)=>renderMirrorItem({item:item.item,
+        onPress:()=>navigation.navigate(EtoroRoutes.MarketPage, { instrument:item.item.instrument.InstrumentID.toString() })
+      })}
       keyExtractor={(mirror) => mirror.instrument.InstrumentID.toString()}
       contentContainerStyle={styles.container}
     />
