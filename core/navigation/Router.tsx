@@ -44,7 +44,7 @@ export default function Router() {
             contentStyle: { backgroundColor: theme.bottomBackgroundColor },
           }}
         >
-          {true ? (
+          {isAuthenticated ? (
             <>
               <Stack.Screen
                 name={EtoroRoutes.BottomTabs}
