@@ -20,6 +20,7 @@ import { selectUser, selectUserStatus } from '../../../store/selectors/userSelec
 import { Credentials, isLoginMissingScopes, isTwoFactorResponse, LoginResponse } from '../../../core/@etoro/types/auth';
 import LoginService from '../../../core/services/LoginSerivce';
 import { setTwoFactorRequired } from '../../../store/slices/twoFactorSlice';
+import { setAuthenticatedTrue } from '../../../store/slices/authSlice';
 
 interface EmailModalProps {
   navigation: any;
@@ -58,6 +59,8 @@ const EmailModal = ({ navigation }: EmailModalProps) => {
       // Handle missing scopes
       return;
     }
+    navigation.goBack();
+    dispatch(setAuthenticatedTrue());
   };
 
   const loginErrorHandler = (error: any) => {
