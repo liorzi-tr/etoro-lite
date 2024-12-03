@@ -7,6 +7,7 @@ class LogoutService {
     const interceptorConfig: InterceptorConfig = {
       addHeaders: {
         auhtorization: true,
+        authenticationToken: true,
         deviceId: true,
       },
       categories: ['Logout'],
