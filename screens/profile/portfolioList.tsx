@@ -2,8 +2,9 @@ import {  ActivityIndicator, FlatList, StyleSheet, View,Text } from "react-nativ
 import { renderMirrorItem } from './components/miroritem';
 import { EtoroRoutes, EtoroScreenProps } from '../../core/@etoro/types';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { fetchInstruments } from '../../core/services/instrumentsRepo';
+import { fetchInstruments, ResultInstrument } from '../../core/services/instrumentsRepo';
 import  fetchLoginData from '../../core/services/loginData/loginData.service';
+import { LoginDataResponse } from '../../core/@etoro/types/loginData.interface';
 // TypeScript Interfaces
 interface Position {
   PositionID: number;
@@ -70,7 +71,12 @@ const sampleMirrors: Mirror[] = [
 
 export default function Portfolio({ navigation }: EtoroScreenProps<EtoroRoutes.Portfolio>){
     const  queryClient = useQueryClient();
-    const {isLoading,error,data} = useQuery({queryKey:['instrumentMeta'], queryFn:()=>Promise.all([fetchInstruments(),fetchLoginData()]), })
+    const {isLoading,error,data} = useQuery({queryKey:['instrumentMeta'], queryFn:async ()=>{
+        const [instruments, loginData] = await Promise.all([
+            fetchInstruments(),
+            fetchLoginData()
+          ]);
+          return groupPositionsWithInstruments(loginData, instruments);}, })
      
   if (isLoading) {
     return (
@@ -89,13 +95,11 @@ export default function Portfolio({ navigation }: EtoroScreenProps<EtoroRoutes.P
   }
   return (
     <>
-    <Text>
-        {JSON.stringify(data)}
-    </Text>
+ 
     <FlatList
-      data={sampleMirrors}
+      data={data}
       renderItem={renderMirrorItem}
-      keyExtractor={(mirror) => mirror.MirrorID.toString()}
+      keyExtractor={(mirror) => mirror.instrument.InstrumentID.toString()}
       contentContainerStyle={styles.container}
     />
     </>
@@ -154,4 +158,33 @@ const styles = StyleSheet.create({
     color: 'red',
   },
 });
-
+export interface  PositionGroup {
+    instrument: ResultInstrument;
+    positions: Position[];
+    totalUnits: number;
+  }
+export const groupPositionsWithInstruments = (
+    loginData: LoginDataResponse,
+    instruments: {[key: number]: ResultInstrument}
+  ): PositionGroup[] => {
+    const groupedPositions: {[key: number]: PositionGroup} = {};
+  
+    // Group positions by InstrumentID and add instrument data
+    loginData.AggregatedResult?.ApiResponses?.PrivatePortfolio?.Content.ClientPortfolio?.Positions.forEach(position => {
+      const instrumentId = position.InstrumentID;
+      const instrument = instruments[instrumentId];
+  
+      if (!groupedPositions[instrumentId]) {
+        groupedPositions[instrumentId] = {
+          instrument,
+          positions: [],
+          totalUnits: 0
+        };
+      }
+  
+      groupedPositions[instrumentId].positions.push(position);
+      groupedPositions[instrumentId].totalUnits += position.Amount;
+    });
+  
+    return Object.values(groupedPositions);
+  };
