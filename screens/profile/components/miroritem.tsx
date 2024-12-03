@@ -1,5 +1,5 @@
 import { View, Text ,FlatList, StyleSheet} from 'react-native';
-import { Mirror } from '../../../core/services/loginData/interfaces/loginData.interface';
+import { Mirror } from '../../../core/@etoro/types/loginData.interface';
 import { RenderPositionItem } from './positionItem';
 
 export const renderMirrorItem = ({ item }: { item: Mirror }) => (

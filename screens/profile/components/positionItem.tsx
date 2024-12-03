@@ -1,6 +1,7 @@
 import { View , StyleSheet ,Text} from 'react-native';
-import { Position } from '../../../core/services/loginData/interfaces/loginData.interface';
-import { useDisplayedColumns } from './displayedColumns.provider';
+import { Position } from '../../../core/@etoro/types/loginData.interface';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../store/store';
 
 const renderColumn = (position: Position, column: string) => {
     switch (column) {
@@ -17,7 +18,8 @@ const renderColumn = (position: Position, column: string) => {
     }
   };
 export function RenderPositionItem ({ item }: { item: Position })  {
-    const displayedColumns = useDisplayedColumns();
+const displayedColumns = ['Leverage']
+//useSelector((state: RootState) => state.portfolioColumns.displayedColumns);
 
     return <View style={styles.row}>
       {/* Static Leftmost Column */}

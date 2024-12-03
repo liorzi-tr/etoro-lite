@@ -1,5 +1,5 @@
 import axiosInstance, { InterceptorConfig } from '../../utils/api';
-import { LoginDataResponse} from './interfaces/loginData.interface';
+import { LoginDataResponse} from '../../@etoro/types/loginData.interface';
 export class LoginDataService {
   private readonly baseUrl = 'https://www.etoro.com/api/logindata/v1.1/logindata';
 

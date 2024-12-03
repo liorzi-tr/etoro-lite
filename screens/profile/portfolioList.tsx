@@ -1,7 +1,8 @@
-import {  FlatList, StyleSheet } from "react-native";
+import {  ActivityIndicator, FlatList, StyleSheet, View,Text } from "react-native";
 import { renderMirrorItem } from './components/miroritem';
 import { EtoroRoutes, EtoroScreenProps } from '../../core/@etoro/types';
-import { DisplayedColumnsProvider } from './components/displayedColumns.provider';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { fetchInstruments } from '../../core/services/instrumentsRepo';
 
 // TypeScript Interfaces
 interface Position {
@@ -68,16 +69,36 @@ const sampleMirrors: Mirror[] = [
 ];
 
 export default function Portfolio({ navigation }: EtoroScreenProps<EtoroRoutes.Portfolio>){
-  return (
-    <DisplayedColumnsProvider columns={[]}>
+    const  queryClient = useQueryClient();
+    const {isLoading,error,data} = useQuery({queryKey:['instrumentMeta'], queryFn:fetchInstruments, })
+    
+  if (isLoading) {
+    return (
+      <View style={styles.loaderContainer}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
+  }
 
+  if (error) {
+    return (
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorText}>Error loading data</Text>
+      </View>
+    );
+  }
+  return (
+    <>
+    <Text>
+        {JSON.stringify(data)}
+    </Text>
     <FlatList
       data={sampleMirrors}
       renderItem={renderMirrorItem}
       keyExtractor={(mirror) => mirror.MirrorID.toString()}
       contentContainerStyle={styles.container}
     />
-    </DisplayedColumnsProvider>
+    </>
   );
 };
 
@@ -118,6 +139,19 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 14,
+  },
+  loaderContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  errorText: {
+    color: 'red',
   },
 });
 

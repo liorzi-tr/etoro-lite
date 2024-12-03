@@ -1,4 +1,4 @@
-import { Position, PrivatePortfolio } from '../loginData/interfaces/loginData.interface';
+import { Position, PrivatePortfolio } from '../../@etoro/types/loginData.interface';
 
 function groupPositionsByInstrument(portfolio: PrivatePortfolio) {
     const groupedPositions: { [key: number]: { totalAmount: number, positions: Position[] } } = {};
