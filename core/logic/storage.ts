@@ -27,7 +27,7 @@ export const clearEmailFromLocalStorage = async (): Promise<void> => {
   }
 };
 
-export const setDeviceId = async (): Promise<void> => {
+export const setDeviceId = async (deviceId: any): Promise<void> => {
   try {
     await AsyncStorage.setItem('X-Sts-Deviceid', getDeviceId());
   } catch (error) {

@@ -19,16 +19,17 @@ const interceptorConfig: InterceptorConfig = {
   };
 
 const HomeScreen = () => {
+    const theme = useSelector(selectTheme);
     const [rawData, setRawData] = useState([]); // Store fetched data in state
     const [user, setUser] = useState(""); // Store the username
     const [cashAvailable, setCash] = useState(0); // Store the username
     const [bonus, setBonus] = useState(0); // Store the username
-  
+
     // Function to fetch user data
     const fetchUser = () => {
       const baseUrl = "https://www.etoro.com/api/logindata/v1.1/logindata";
       const url = `${baseUrl}?conditionIncludeDisplayableInstruments=false&conditionIncludeMarkets=false&conditionIncludeMetadata=false&conditionIncludeMirrorValidation=false`;
-  
+
       return axiosInstance
         .get(url, { interceptorConfig })
         .then((response) => {
@@ -49,13 +50,13 @@ const HomeScreen = () => {
           }
         });
     };
-  
+
     // Function to fetch equity data for a specific user
     const fetchEquityData = (username) => {
       if (!username) return; // Ensure username is available before making the call
-  
+
       const url = `/sapi/userstats/Equity/UserName/${username}?mindate=12/1/2023&client_request_id=93a6ff01-32f4-413d-8552-b3d199f33551`;
-  
+
       axiosInstance
         .get(url, { interceptorConfig })
         .then((response) => {
@@ -70,7 +71,7 @@ const HomeScreen = () => {
           }
         });
     };
-  
+
     useEffect(() => {
       // First fetch the user, then fetch equity data
       fetchUser().then((fetchedUser) => {
@@ -78,16 +79,16 @@ const HomeScreen = () => {
           fetchEquityData(fetchedUser); // Use the fetched username to get equity data
         }
       });
-  
+
       // Set up an interval to refetch data every 5 seconds
-    //   const intervalId = setInterval(() => {
-    //     if (user) {
-    //       fetchEquityData(user); // Fetch equity data periodically if user is available
-    //     }
-    //   }, 5000);
-  
-    //   // Cleanup interval on component unmount
-    //   return () => clearInterval(intervalId);
+      const intervalId = setInterval(() => {
+        if (user) {
+          fetchEquityData(user); // Fetch equity data periodically if user is available
+        }
+      }, 5000);
+
+      // Cleanup interval on component unmount
+      return () => clearInterval(intervalId);
     }, [user]);
 
   const [timeRange, setTimeRange] = useState("1W"); // Default to 1 week
@@ -186,7 +187,7 @@ const HomeScreen = () => {
           : 0;
 
   return (
-      <View style={styles.container}>
+      <View style={[styles.container, {backgroundColor: theme.bottomBackgroundColor}]}>
         <Text style={styles.username}>Hi, {user}!</Text>
         <Text style={styles.title}>Cash and Holding</Text>
         <Text style={styles.acountValue}>${value}</Text>
@@ -220,8 +221,8 @@ const HomeScreen = () => {
             yAxisLabel="$"
             yAxisSuffix=""
             chartConfig={{
-              backgroundGradientFrom: "#ffffff",
-              backgroundGradientTo: "#ffffff",
+              backgroundGradientFrom: theme.bottomBackgroundColor,
+              backgroundGradientTo: theme.bottomBackgroundColor,
               decimalPlaces: 2,
               color: (opacity = 1) => `rgba(0, 128, 0, ${opacity})`, // Green line
               labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
@@ -281,8 +282,8 @@ const HomeScreen = () => {
             ]}
           >
             ({profitLossPercentage}%)
-        
-        
+
+
           </Text>
         </View>
       </View>

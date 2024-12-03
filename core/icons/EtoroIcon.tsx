@@ -17,6 +17,7 @@ import Wallet from './Wallet';
 import Portfolio from './Portfolio';
 import Discover from './Discover';
 import Home from './Home';
+import Search from './Search';
 
 interface EtoroIconProps {
   iconName: string;
@@ -42,7 +43,8 @@ const icons: any = {
   portfolio: Portfolio,
   discover: Discover,
   watchlist: Watchlist,
-  home: Home
+  home: Home,
+  search: Search
 };
 
 export default function EtoroIcon({ iconName, color, size }: EtoroIconProps) {

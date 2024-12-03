@@ -8,6 +8,9 @@ export type EtoroParamList = {
   Wallet: any;
   Settings: any;
   Notifications: any;
+  Watchlist: any;
+  Discover: any;
+  Search: any;
   BottomTabs: any;
   AuthScreen: any;
   AuthStack: any;
@@ -25,6 +28,7 @@ export enum EtoroRoutes {
   Profile = 'Profile',
   Discover = 'Discover',
   Watchlist = 'Watchlist',
+  Search = 'Search',
   Wallet = 'Wallet',
   Portfolio = 'Portfolio',
   Account = 'Account',

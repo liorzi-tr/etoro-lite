@@ -9,6 +9,8 @@ import { EtoroParamList, EtoroRoutes } from "../@etoro/types";
 import HomeScreen from "../../screens/home/HomeScreen";
 import MarketPage from "../../screens/market-page/MarketPage";
 import MarketPageScreen from "../../screens/market-page/MarketPage";
+import SearchScreen from "../../screens/search/SearchScreen";
+import Portfolio from "../../screens/profile/portfolioList";
 
 const Tab = createBottomTabNavigator<EtoroParamList>();
 
@@ -57,9 +59,40 @@ export default function BottomTabs() {
             tabBarLabel: () => <TabLabel />,
           }}
         ></Tab.Screen>
-  
         <Tab.Screen
-          name={EtoroRoutes.Wallet}
+          name={EtoroRoutes.Portfolio}
+          component={Portfolio}
+          options={{
+            headerTitle(props) {
+              return <Image style={styles.logo} source={require('../../assets/etoro-logo.png')} />;
+            },
+            headerTitleStyle: {
+              color: theme.textColor,
+            },
+            tabBarIcon: ({ focused }: any) => (
+              <TabIcon focused={focused} icon={'portfolio'} />
+            ),
+            tabBarLabel: () => <TabLabel />,
+          }}
+        ></Tab.Screen>
+        <Tab.Screen
+          name={EtoroRoutes.Search}
+          component={SearchScreen}
+          options={{
+            headerTitle(props) {
+              return <Image style={styles.logo} source={require('../../assets/etoro-logo.png')} />;
+            },
+            headerTitleStyle: {
+              color: theme.textColor,
+            },
+            tabBarIcon: ({ focused }: any) => (
+              <TabIcon focused={focused} icon={'search'} />
+            ),
+            tabBarLabel: () => <TabLabel />,
+          }}
+        ></Tab.Screen>
+        <Tab.Screen
+          name={EtoroRoutes.Profile}
           component={ProfileStackNav}
           options={{
             headerTitle(props) {
@@ -69,7 +102,7 @@ export default function BottomTabs() {
               color: theme.textColor,
             },
             tabBarIcon: ({ focused }: any) => (
-              <TabIcon focused={focused} icon={'wallet'} />
+              <TabIcon focused={focused} icon={'settings'} />
             ),
             tabBarLabel: () => <TabLabel />,
           }}
