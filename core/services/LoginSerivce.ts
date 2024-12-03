@@ -89,7 +89,7 @@ class LoginService {
       addHeaders: {
         gatewayAppId: true,
         appDomain: true,
-        auhtorization: true,
+        authenticationToken: true,
         refreshToken: true,
         deviceId: true,
       },

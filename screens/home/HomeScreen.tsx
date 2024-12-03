@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { View, Text, Dimensions, StyleSheet, TouchableOpacity, Pressable } from "react-native";
 import { LineChart } from "react-native-chart-kit";
 import axiosInstance, { InterceptorConfig } from "../../core/utils/api";
+import { useSelector } from "react-redux";
+import { selectTheme } from "../../store/selectors/themeSelectors";
 
 const interceptorConfig: InterceptorConfig = {
     addHeaders: {
@@ -17,6 +19,7 @@ const interceptorConfig: InterceptorConfig = {
   };
 
 const HomeScreen = () => {
+  const theme = useSelector(selectTheme);
   const rawData = [
     {
       "timestamp": "2024-07-16T00:00:00Z",
@@ -1245,7 +1248,7 @@ const HomeScreen = () => {
           : 0;
 
   return (
-      <View style={styles.container}>
+      <View style={[styles.container, {backgroundColor: theme.topBackgroundColor}]}>
         <Text style={styles.username}>Hi, dvora!</Text>
         <Text style={styles.title}>Cash and Holding</Text>
         <Text style={styles.acountValue}>${value}</Text>
@@ -1333,7 +1336,6 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: "#ffffff",
     padding: 16,
   },
   title: {
@@ -1391,4 +1393,3 @@ const styles = StyleSheet.create({
 });
 
 export default HomeScreen;
-
