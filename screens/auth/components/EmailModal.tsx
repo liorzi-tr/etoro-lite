@@ -113,9 +113,7 @@ const EmailModal = ({ navigation }: EmailModalProps) => {
           <Text style={[styles.signupLink, { color: theme.primaryColor }]}>Not a user yet? Sign up!</Text>
         </Pressable>
       </View>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 10 : 0}
+      <View
         style={{ marginTop: 'auto' }}
       >
         <EtButton
@@ -123,7 +121,7 @@ const EmailModal = ({ navigation }: EmailModalProps) => {
           onPress={handleLogin}
           style={styles.button}
         />
-      </KeyboardAvoidingView>
+      </View>
     </View>
   );
 };
