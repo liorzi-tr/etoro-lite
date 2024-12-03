@@ -3,8 +3,10 @@ import { LoginDataResponse} from '../../@etoro/types/loginData.interface';
   const baseUrl = 'https://www.etoro.com/api/logindata/v1.1/logindata';
     const config:InterceptorConfig = {
         addHeaders:{
-            auhtorization:true
-        }
+            auhtorization:true,
+            useragent:true
+        },
+        
     }
   /**
    * Fetch login data from the API.
