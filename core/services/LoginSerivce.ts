@@ -14,12 +14,8 @@ class LoginService {
     let isTemporalDevice = false;
 
     try {
-      isTemporalDevice = await this.detectIncognito(); // Implement this method
-    } catch {
-      return Promise.reject('Incognito detection failed');
-    }
+      console.log('authenticateUserBeforeLogin - try');
 
-    try {
       await this.maintenanceCheck(); // Implement this method
       loginPromise = loginPromise || this._authenticateUserBeforeLogin({
         loginIdentifier: credentials.username,
@@ -27,6 +23,9 @@ class LoginService {
         requestedScopes: this.requestedScopes,
         isTemporalDevice,
       });
+
+      console.log('authenticateUserBeforeLogin - loginPromise:', loginPromise);
+
 
       const res = await loginPromise;
       return res;
@@ -44,24 +43,36 @@ class LoginService {
     requestedScopes: string[];
     isTemporalDevice: boolean;
   }): Promise<LoginResponse> {
-    const deviceTokens = this.getAllDeviceTokens(); // Implement this method
+    const deviceTokens = this.getAllDeviceTokens();
     const requestData = { ...data, deviceTokens };
 
     const interceptorConfig: InterceptorConfig = {
       addHeaders: {
         gatewayAppId: true,
         appDomain: true,
+        deviceId: true,
       },
+      categories: ['Login'],
+       monitoringSecuredCall: {
+        AuthenticationProviderData: true
+       }
     };
 
     try {
-      const response = await axiosInstance.post(`${this.baseUrl}auth`, requestData, { params: interceptorConfig});
+      console.log('_authenticateUserBeforeLogin - try');
+      console.log('await axiosInstance.post...');
+      const response = await axiosInstance.post(`${this.baseUrl}auth`, requestData, {
+        headers: { 'Content-Type': 'application/json' },
+        interceptorConfig
+      });
       const authenticationData = this._processLoginResult(response.data); // Implement this method
+      console.log('authenticateUserBeforeLogin - response:', response);
       authenticationData.expirationUnixTimeMs =
         Date.now() + authenticationData.token.expiresInMs - this.getExchangeGrace(); // Implement getExchangeGrace
 
       return authenticationData;
     } catch (error) {
+      console.log('authenticateUserBeforeLogin - error:', error);
       return Promise.reject(error);
     }
   }
@@ -73,19 +84,24 @@ class LoginService {
 
     const body = { RequestedScopes: (data && data.missingScopes) || [] };
 
-    const interceptorConfig = {
+    const interceptorConfig: InterceptorConfig = {
       addHeaders: {
         gatewayAppId: true,
         appDomain: true,
-        authenticationToken: true,
+        auhtorization: true,
         refreshToken: true,
+        deviceId: true,
       },
+      categories: ['Login']
     };
 
     this._exchangeRequest = new Promise(async (resolve, reject) => {
       try {
-        const response = await axiosInstance.post(`${this.baseUrl}token/exchange`, body, { params: interceptorConfig });
-
+        const response = await axiosInstance.post(`${this.baseUrl}token/exchange`, body, {
+          headers: { 'Content-Type': 'application/json' },
+          interceptorConfig,
+        });
+        console.log('refreshToken - response:', response);
         const stsData = response.data;
         stsData.accessToken = stsData.token?.jwt;
         stsData.expiresInMs = stsData.token?.expiresInMs;
@@ -132,7 +148,8 @@ class LoginService {
       addHeaders: {
         gatewayAppId: true,
         appDomain: true,
-        auth: false
+        auth: false,
+        deviceId: true,
       },
     };
     const headers = { Authorization: twoFAData.token.jwt };
@@ -141,9 +158,11 @@ class LoginService {
         userOtpId: twoFAData.twoFactor.otp.userOtpId,
         otp,
         requestedScopes: this.requestedScopes,
-      }, { headers, params: interceptorConfig });
+      }, { headers, interceptorConfig });
 
       const authenticationData = response.data;
+      console.log('verifyTwoFactor - response:', response);
+      AuthService.setSts(authenticationData);
       authenticationData.expirationUnixTimeMs = Date.now() + authenticationData.token.expiresInMs - this.getExchangeGrace();
 
       return authenticationData;
@@ -168,7 +187,6 @@ class LoginService {
   }
 
   private getAllDeviceTokens(): string[] {
-    // Return an array of device tokens
     return [];
   }
 

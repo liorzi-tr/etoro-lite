@@ -5,7 +5,7 @@ import loginSerivce from '../../core/services/LoginSerivce';
 
 interface TwoFactorState {
   required: boolean;
-  data: any;
+  data: TwoFactorResponse | null;
   status: 'idle' | 'loading' | 'succeeded' | 'failed';
   error: string | null;
 }
@@ -22,9 +22,12 @@ export const verifyTwoFactor = createAsyncThunk(
   async ({ twoFAData, otp }: { twoFAData: TwoFactorResponse; otp: string } , { rejectWithValue }) => {
     try {
       const data = await loginSerivce.verifyTwoFactor(twoFAData, otp);
+      console.log('Two factor verification successful');
       await loginSerivce.refreshToken(data);
+      console.log('Token refreshed');
       return true;
     } catch (error: any) {
+      console.error('Two factor verification failed:', error);
       return rejectWithValue(error.message || 'Verification failed');
     }
   },
@@ -34,9 +37,9 @@ const twoFactorSlice = createSlice({
   name: 'twoFactor',
   initialState,
   reducers: {
-    setTwoFactorRequired(state, action) {
+    setTwoFactorRequired(state, data) {
       state.required = true;
-      state.data = action.payload;
+      state.data = data.payload;
     },
     resetTwoFactor(state) {
       state.required = false;
