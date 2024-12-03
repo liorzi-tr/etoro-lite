@@ -23,9 +23,7 @@ export default function FirstOnboarding({ navigation }: EtoroScreenProps<EtoroRo
   };
 
   return (
-    <ScrollView>
-
-    <Animated.View style={[styles.container, { backgroundColor: theme.bottomBackgroundColor }]}>
+    <Animated.ScrollView contentContainerStyle={[styles.container, { backgroundColor: theme.bottomBackgroundColor }]}>
       <Animated.View
         entering={FadeInLeft.duration(800)}
         exiting={FadeOutLeft.duration(800)}
@@ -58,8 +56,7 @@ export default function FirstOnboarding({ navigation }: EtoroScreenProps<EtoroRo
       >
         <PlxButton title={t('onboardingScreens.nextButton')} onPress={handlePress} textColor={theme.buttonTextColor} style={styles.button} />
       </Animated.View>
-    </Animated.View>
-    </ScrollView>
+    </Animated.ScrollView>
 
   );
 }
@@ -67,7 +64,7 @@ export default function FirstOnboarding({ navigation }: EtoroScreenProps<EtoroRo
 const styles = StyleSheet.create({
   container: {
     ...globalStyles.container,
-    justifyContent: 'space-around',
+    justifyContent: 'space-evenly',
   },
   titleContainer: {
     alignSelf: 'center',
