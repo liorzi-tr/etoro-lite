@@ -11,6 +11,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { initializeTheme } from "../../store/slices/themeSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { checkAuthentication } from '../../store/slices/authSlice';
+import { Image, StyleSheet } from "react-native";
 
 const Stack = createNativeStackNavigator<EtoroParamList>();
 
@@ -54,7 +55,14 @@ export default function Router() {
               <Stack.Screen
                 name={EtoroRoutes.MarketPage}
                 component={MarketPageScreen}
-                options={{ title: "Market Page", headerShown: true }}
+                options={{ headerTitle(props) {
+                  return (
+                    <Image
+                      style={styles.logo}
+                      source={require("../../assets/etoro-logo.png")}
+                    />
+                  );
+                }, headerShown: true, headerBackButtonDisplayMode: 'minimal', headerTintColor: theme.textColor, headerShadowVisible: false }}
               />
             </>
           ) : (
@@ -69,3 +77,11 @@ export default function Router() {
     </GestureHandlerRootView>
   );
 }
+
+
+const styles = StyleSheet.create({
+  logo: {
+    width: 100,
+    height: 40,
+  },
+});

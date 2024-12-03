@@ -102,7 +102,7 @@ export default function BottomTabs() {
               color: theme.textColor,
             },
             tabBarIcon: ({ focused }: any) => (
-              <TabIcon focused={focused} icon={'settings'} />
+              <TabIcon focused={focused} icon={'user'} />
             ),
             tabBarLabel: () => <TabLabel />,
           }}
