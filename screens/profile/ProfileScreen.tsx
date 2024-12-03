@@ -15,10 +15,13 @@ import { EtoroRoutes, EtoroScreenProps } from '../../core/@etoro/types';
 import OuterCard from '../../core/components/atoms/OuterCard';
 import { selectTheme } from '../../store/selectors/themeSelectors';
 import { DisplayedColumnsProvider } from './components/displayedColumns.provider';
+import { logout } from '../../store/slices/authSlice';
+import { AppDispatch } from '../../store/store';
+import LogoutService from '../../core/services/LogoutService';
 
 export default function ProfileScreen({ navigation }: EtoroScreenProps<EtoroRoutes.Profile>) {
   const theme = useSelector(selectTheme);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const handlePress = (): void => {
     navigation.navigate(EtoroRoutes.Account);
@@ -28,16 +31,10 @@ export default function ProfileScreen({ navigation }: EtoroScreenProps<EtoroRout
     navigation.navigate(EtoroRoutes.Portfolio);
   }
 
-  // const handleLogout = (): void => {
-  //   signOut(auth)
-  //     .then(() => {
-  //       console.log('Signed out');
-  //       dispatch(clearUser());
-  //     })
-  //     .catch((error) => {
-  //       console.error(error);
-  //     });
-  // };
+  const handleLogout = async (): Promise<void> => {
+    await LogoutService.logout();
+    dispatch(logout());
+  };
   return (
 
     <BackgroundGradient
@@ -90,7 +87,7 @@ export default function ProfileScreen({ navigation }: EtoroScreenProps<EtoroRout
             color={theme.textColor}
             iconLeftSize={30}
             iconRightSize={36}
-            onPress={() => {}}
+            onPress={handleLogout}
           ></SectionButton>
         </OuterCard>
       </ScrollView>
