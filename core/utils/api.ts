@@ -88,7 +88,7 @@ axiosInstance.interceptors.request.use(
         let deviceId = await getDeviceIdFromLocalStorage();
         if (!deviceId) {
           deviceId = getDeviceId();
-          await setDeviceId();
+          await setDeviceId(deviceId);
         }
         config.headers['X-Sts-Deviceid'] = deviceId;
       }

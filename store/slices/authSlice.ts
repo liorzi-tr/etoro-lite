@@ -4,7 +4,6 @@ import { Credentials, isLoginMissingScopes, isTwoFactorResponse } from '../../co
 import AuthService from '../../core/services/AuthService';
 import { setTwoFactorRequired } from './twoFactorSlice';
 import loginSerivce from '../../core/services/LoginSerivce';
-import LogoutService from '../../core/services/LogoutService';
 
 interface AuthState {
   isAuthenticated: boolean;
@@ -24,16 +23,22 @@ export const checkAuthentication = createAsyncThunk(
   async (any, {dispatch}) => {
     const accessToken = await AuthService.getAccessToken();
     if (accessToken) {
+      console.log('setting authenticated true');
       setAuthenticatedTrue();
     }
-    else {
+    else if (!accessToken) {
       const refreshToken = await AuthService.getRefreshToken();
       if (refreshToken) {
         await loginSerivce.refreshToken();
+        console.log('setting authenticated true');
+
         dispatch(setAuthenticatedTrue());
-      } else {
-        dispatch(logout());
       }
+    }
+    else {
+      console.log('setting authenticated false');
+
+      dispatch(logout());
     }
   }
 );
@@ -87,10 +92,6 @@ const authSlice = createSlice({
       .addCase(checkAuthentication.pending, state => {
         state.status = 'loading';
         state.error = null;
-      })
-      .addCase(checkAuthentication.fulfilled, state => {
-        state.status = 'succeeded';
-        state.isAuthenticated = true;
       })
       .addCase(checkAuthentication.rejected, (state, action) => {
         state.status = 'failed';

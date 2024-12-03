@@ -17,7 +17,7 @@ export default function AuthScreen({ navigation }: EtoroScreenProps<EtoroRoutes.
     navigation.navigate(route);
   };
   return (
-    <ScrollView>
+    <ScrollView contentContainerStyle={{flex: 1, }}>
     <BackgroundGradient
       topColor={theme.topBackgroundColor}
       bottomColor={theme.bottomBackgroundColor}
@@ -66,7 +66,8 @@ export default function AuthScreen({ navigation }: EtoroScreenProps<EtoroRoutes.
 const styles = StyleSheet.create({
   container: {
     ...globalStyles.container,
-    marginTop: 50,
+    marginTop: 30,
+    justifyContent: 'space-around',
   },
   header: {
     justifyContent: 'flex-start',
@@ -89,7 +90,7 @@ const styles = StyleSheet.create({
 
   },
   footer: {
-    flex: 1,
+    // flex: 1,
     // justifyContent: 'center',
     // alignItems: 'center',
     // marginBottom: 50,
