@@ -11,16 +11,16 @@ import { globalStyles } from '../../../styles/constants';
 import EtButton from '../../../core/components/atoms/EtButton';
 import Input from '../../../core/components/atoms/Input';
 import PlanixIcon from '../../../core/icons/EtoroIcon';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../../store/store';
 import { EtoroRoutes } from '../../../core/@etoro/types';
 import { selectTheme } from '../../../store/selectors/themeSelectors';
-import { selectUser, selectUserStatus } from '../../../store/selectors/userSelectors';
 import { Credentials, isLoginMissingScopes, isTwoFactorResponse, LoginResponse } from '../../../core/@etoro/types/auth';
 import LoginService from '../../../core/services/LoginSerivce';
 import { setTwoFactorRequired } from '../../../store/slices/twoFactorSlice';
 import { setAuthenticatedTrue } from '../../../store/slices/authSlice';
+import AuthService from '../../../core/services/AuthService';
 
 interface EmailModalProps {
   navigation: any;
@@ -59,7 +59,9 @@ const EmailModal = ({ navigation }: EmailModalProps) => {
       // Handle missing scopes
       return;
     }
+    AuthService.setSts(data);
     navigation.goBack();
+    await LoginService.refreshToken();
     dispatch(setAuthenticatedTrue());
   };
 
