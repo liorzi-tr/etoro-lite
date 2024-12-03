@@ -41,16 +41,13 @@ axiosInstance.interceptors.request.use(
 
       if(addHeaders.authenticationToken) {
         console.log('Adding authentication token');
-        const accessToken = await AuthService.getRefreshToken();
-        config.headers['Authentication'] = accessToken;
+        const addHeader = await AuthService.getRefreshToken();
+        config.headers['Authorization'] = addHeader;
       }
 
       if (addHeaders.auhtorization) {
         console.log('Adding authorization header');
         const authHeader = await AuthService.getAccessToken();
-        console.log('token', authHeader);
-
-
         config.headers['Authorization'] = authHeader;
       }
 
