@@ -6,9 +6,13 @@ import AuthService from "./AuthService";
 class LoginService {
   private _exchangeRequest: Promise<any> | null = null;
   private refreshTokenTimeout: NodeJS.Timeout | null = null;
-
+  private _accessToken: string = '';
   private requestedScopes: string[] = [];
   private readonly baseUrl: string = '/api/sts/oauth/v3/';
+
+  public get accessToken(): string {
+    return this._accessToken;
+  }
 
   async authenticateUserBeforeLogin(credentials: Credentials, loginPromise?: Promise<any>): Promise<LoginResponse> {
     let isTemporalDevice = false;
@@ -89,7 +93,7 @@ class LoginService {
       addHeaders: {
         gatewayAppId: true,
         appDomain: true,
-        auhtorization: true,
+        authenticationToken: true,
         refreshToken: true,
         deviceId: true,
       },
@@ -104,7 +108,7 @@ class LoginService {
         });
         console.log('refreshToken - response:', response);
         const stsData = response.data;
-        stsData.accessToken = stsData.token?.jwt;
+        stsData.accessToken = this._accessToken = stsData.token?.jwt;
         stsData.expiresInMs = stsData.token?.expiresInMs;
         stsData.antiCsrfToken = '';
         stsData.expirationUnixTimeMs = Date.now() + stsData.expiresInMs;
@@ -149,6 +153,7 @@ class LoginService {
       addHeaders: {
         gatewayAppId: true,
         appDomain: true,
+        twoFactorAuthentication: true,
         auth: false,
         deviceId: true,
       },
@@ -163,7 +168,7 @@ class LoginService {
 
       const authenticationData = response.data;
       console.log('verifyTwoFactor - response:', response);
-      // AuthService.setSts(authenticationData);
+      AuthService.setRefreshToken(authenticationData);
       authenticationData.expirationUnixTimeMs = Date.now() + authenticationData.token.expiresInMs - this.getExchangeGrace();
 
       return authenticationData;

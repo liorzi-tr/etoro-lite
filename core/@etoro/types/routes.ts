@@ -32,6 +32,7 @@ export enum EtoroRoutes {
   AuthStack = 'AuthStack',
   TwoFactorScreen = 'TwoFactorScreen',
   BottomTabs = 'BottomTabs',
+  MarketPage = 'MarketPage',
   OnboardingStack = 'OnboardingStack',
   FirstOnboarding = 'FirstOnboarding',
   SecondOnboarding = 'SecondOnboarding',

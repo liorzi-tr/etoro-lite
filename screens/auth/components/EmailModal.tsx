@@ -49,6 +49,7 @@ const EmailModal = ({ navigation }: EmailModalProps) => {
 
   const loginSuccessHandler = async (data: LoginResponse) => {
     if (isTwoFactorResponse(data)) {
+      await AuthService.setTwoFactorToken(data);
       dispatch(setTwoFactorRequired(data));
       navigation.goBack();
       navigation.navigate(EtoroRoutes.TwoFactorScreen);

@@ -10,6 +10,7 @@ export interface InterceptorConfig {
     useragent?: boolean;
     deviceId?: boolean;
     authenticationToken?: boolean;
+    twoFactorAuthentication?: boolean;
     auhtorization?: boolean;
     refreshToken?: boolean;
     applicationidentifier?: boolean;
@@ -39,10 +40,19 @@ axiosInstance.interceptors.request.use(
     if (interceptorConfig?.addHeaders) {
       const { addHeaders } = interceptorConfig;
 
+      if (addHeaders.twoFactorAuthentication) {
+        const addHeader = await AuthService.getTwoFactorToken();
+        console.log('twoFactorToken', addHeader);
+
+        config.headers['Authorization'] = addHeader;
+      }
+
       if(addHeaders.authenticationToken) {
         console.log('Adding authentication token');
-        const accessToken = await AuthService.getRefreshToken();
-        config.headers['Authentication'] = accessToken;
+        const addHeader = await AuthService.getRefreshToken();
+        console.log('refreshToken', addHeader);
+
+        config.headers['Authorization'] = addHeader;
       }
 
       if (addHeaders.auhtorization) {

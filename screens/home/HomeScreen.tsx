@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { View, Text, Dimensions, StyleSheet, TouchableOpacity, Pressable } from "react-native";
 import { LineChart } from "react-native-chart-kit";
 import axiosInstance, { InterceptorConfig } from "../../core/utils/api";
+import { useSelector } from "react-redux";
+import { selectTheme } from "../../store/selectors/themeSelectors";
 
 const interceptorConfig: InterceptorConfig = {
     addHeaders: {
@@ -337,7 +339,6 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: "#ffffff",
     padding: 16,
   },
   title: {
@@ -395,4 +396,3 @@ const styles = StyleSheet.create({
 });
 
 export default HomeScreen;
-

@@ -29,7 +29,7 @@ const AuthStackScreen = () => {
         name={EtoroRoutes.TwoFactorScreen}
         component={TwoFactorScreen}
         options={{
-          // headerShown: false,
+          headerShown: false,
         }}
       />
       <Stack.Screen
