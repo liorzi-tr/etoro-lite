@@ -5,6 +5,7 @@ export type EtoroParamList = {
   Portfolio:any;
   Account: any;
   Home: any;
+  Wallet: any;
   Settings: any;
   Notifications: any;
   BottomTabs: any;

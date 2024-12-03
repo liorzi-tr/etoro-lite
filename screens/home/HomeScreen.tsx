@@ -80,14 +80,14 @@ const HomeScreen = () => {
       });
   
       // Set up an interval to refetch data every 5 seconds
-      const intervalId = setInterval(() => {
-        if (user) {
-          fetchEquityData(user); // Fetch equity data periodically if user is available
-        }
-      }, 5000);
+    //   const intervalId = setInterval(() => {
+    //     if (user) {
+    //       fetchEquityData(user); // Fetch equity data periodically if user is available
+    //     }
+    //   }, 5000);
   
-      // Cleanup interval on component unmount
-      return () => clearInterval(intervalId);
+    //   // Cleanup interval on component unmount
+    //   return () => clearInterval(intervalId);
     }, [user]);
 
   const [timeRange, setTimeRange] = useState("1W"); // Default to 1 week
@@ -135,6 +135,7 @@ const HomeScreen = () => {
           ? new Date(item.timestamp).toLocaleDateString("en-GB", { day: "2-digit", month: "2-digit" })
           : ""
   );
+
   const equityValues = filteredData.length
   ? filteredData
       .map((item) => item.equity)
@@ -212,7 +213,7 @@ const HomeScreen = () => {
         <LineChart
             data={{
               labels: labels, // Adjusted labels to avoid overlap
-              datasets: [{ data: equityValues }],
+              datasets: [{ data: equityValues.slice(0, 10) }],
             }}
             width={Dimensions.get("window").width + 80} // Full screen width with some padding
             height={220}
