@@ -1,10 +1,24 @@
 // authService.ts
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { LoginResponse } from '../@etoro/types/auth';
+import { LoginResponse, TwoFactorResponse } from '../@etoro/types/auth';
 
 class AuthService {
   private accessToken: string | null = null;
+  private twoFactorToken: string | null = null;
   private refreshToken: string | null = null;
+
+  async setTwoFactorToken(data: TwoFactorResponse) {
+    this.twoFactorToken = data.token.jwt;
+    await AsyncStorage.setItem('twoFactorToken', data.token.jwt);
+  }
+
+  async getTwoFactorToken(): Promise<string | null> {
+    if (this.twoFactorToken) return this.twoFactorToken;
+
+    const token = await AsyncStorage.getItem('twoFactorToken');
+    this.twoFactorToken = token;
+    return token;
+  }
 
   async setAccessToken(stsData: LoginResponse) {
     this.accessToken = stsData.token.jwt;

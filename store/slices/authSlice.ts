@@ -21,7 +21,7 @@ const initialState: AuthState = {
 // Async thunk to check authentication on app startup
 export const checkAuthentication = createAsyncThunk(
   'auth/checkAuthentication',
-  async () => {
+  async (any, {dispatch}) => {
     const accessToken = await AuthService.getAccessToken();
     if (accessToken) {
       setAuthenticatedTrue();
@@ -30,8 +30,9 @@ export const checkAuthentication = createAsyncThunk(
       const refreshToken = await AuthService.getRefreshToken();
       if (refreshToken) {
         await loginSerivce.refreshToken();
+        dispatch(setAuthenticatedTrue());
       } else {
-        logout();
+        dispatch(logout());
       }
     }
   }

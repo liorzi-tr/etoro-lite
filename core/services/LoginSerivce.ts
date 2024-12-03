@@ -149,6 +149,7 @@ class LoginService {
       addHeaders: {
         gatewayAppId: true,
         appDomain: true,
+        twoFactorAuthentication: true,
         auth: false,
         deviceId: true,
       },
@@ -163,7 +164,7 @@ class LoginService {
 
       const authenticationData = response.data;
       console.log('verifyTwoFactor - response:', response);
-      // AuthService.setSts(authenticationData);
+      AuthService.setRefreshToken(authenticationData);
       authenticationData.expirationUnixTimeMs = Date.now() + authenticationData.token.expiresInMs - this.getExchangeGrace();
 
       return authenticationData;
