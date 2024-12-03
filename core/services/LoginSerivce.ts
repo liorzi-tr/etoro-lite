@@ -9,11 +9,6 @@ class LoginService {
 
   private requestedScopes: string[] = [];
   private readonly baseUrl: string = '/api/sts/oauth/v3/';
-  private _accessToken: string | null = null;
-
-  public get accessToken(): string | null {
-    return this._accessToken;
-  }
 
   async authenticateUserBeforeLogin(credentials: Credentials, loginPromise?: Promise<any>): Promise<LoginResponse> {
     let isTemporalDevice = false;
@@ -108,12 +103,12 @@ class LoginService {
         });
         console.log('refreshToken - response:', response);
         const stsData = response.data;
-        stsData.accessToken = this._accessToken = stsData.token?.jwt;
+        stsData.accessToken = stsData.token?.jwt;
         stsData.expiresInMs = stsData.token?.expiresInMs;
         stsData.antiCsrfToken = '';
         stsData.expirationUnixTimeMs = Date.now() + stsData.expiresInMs;
 
-        AuthService.setSts(stsData); // Implement authService
+        AuthService.setAccessToken(stsData); // Implement authService
 
         if (stsData.accessToken && stsData.expirationUnixTimeMs) {
           this.startRefreshTokenTimer(stsData.expirationUnixTimeMs);
@@ -167,7 +162,7 @@ class LoginService {
 
       const authenticationData = response.data;
       console.log('verifyTwoFactor - response:', response);
-      AuthService.setSts(authenticationData);
+      // AuthService.setSts(authenticationData);
       authenticationData.expirationUnixTimeMs = Date.now() + authenticationData.token.expiresInMs - this.getExchangeGrace();
 
       return authenticationData;
