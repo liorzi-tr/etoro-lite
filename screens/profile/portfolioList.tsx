@@ -100,7 +100,7 @@ export default function Portfolio({ navigation }: EtoroScreenProps<EtoroRoutes.P
     <FlatList
       data={data}
       renderItem={(item)=>renderMirrorItem({item:item.item,
-        onPress:()=>navigation.navigate(EtoroRoutes.MarketPage, { instrument:item.item.instrument.InstrumentID.toString() })
+        onPress:()=>navigation.navigate(EtoroRoutes.MarketPage, { instrument:item.item.instrument.SymbolFull })
       })}
       keyExtractor={(mirror) => mirror.instrument.InstrumentID.toString()}
       contentContainerStyle={styles.container}
