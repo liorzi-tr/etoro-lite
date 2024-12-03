@@ -14,7 +14,7 @@ export interface InstrumentBulk{
 
 interface ClosingPricesResponse{InstrumentId:number,IsMarketOpen:boolean,OfficialClosingPrice:number}
 
-interface ResultInstrument {
+export interface ResultInstrument {
     ExchangeID: number,
     HasExpirationDate: boolean,
     Images:{Height:number,Width:number, Uri:string} [],
