@@ -8,6 +8,7 @@ import { LoginDataResponse } from '../../core/@etoro/types/loginData.interface';
 import { useSelector } from "react-redux";
 import { selectTheme } from "../../store/selectors/themeSelectors";
 import { useEffect } from "react";
+import Loader from "../../core/components/atoms/Loader";
 // TypeScript Interfaces
 interface Position {
   PositionID: number;
@@ -86,7 +87,7 @@ export default function Portfolio({ navigation }: EtoroScreenProps<EtoroRoutes.P
   if (isLoading) {
     return (
       <View style={styles.loaderContainer}>
-        <ActivityIndicator size="large" color={theme.primaryColor} />
+        <Loader  />
       </View>
     );
   }

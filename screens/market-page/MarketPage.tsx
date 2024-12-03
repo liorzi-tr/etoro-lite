@@ -3,6 +3,7 @@ import { View, StyleSheet, ActivityIndicator } from "react-native";
 import WebView from "react-native-webview";
 import { useRoute } from "@react-navigation/native";
 import LoginSerivce from "../../core/services/LoginSerivce";
+import Loader from "../../core/components/atoms/Loader";
 
 const MarketPageScreen = () => {
   const route = useRoute();
@@ -35,7 +36,7 @@ const MarketPageScreen = () => {
       {/* Show loader until the WebView has loaded or 5 seconds has passed */}
       {isLoading && (
         <View style={styles.loaderContainer}>
-          <ActivityIndicator size="large" color="#3FB923" />
+          <Loader/>
         </View>
       )}
 
@@ -46,8 +47,6 @@ const MarketPageScreen = () => {
         style={styles.webview}
         webviewDebuggingEnabled={true}
         injectedJavaScriptBeforeContentLoaded={INJECTED_JAVASCRIPT}
-        cacheEnabled={false}
-        incognito={true}
         onLoadEnd={handleLoadEnd} // Hide loader when WebView finishes loading
       />
     </View>
