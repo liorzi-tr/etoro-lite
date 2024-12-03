@@ -36,28 +36,7 @@ export default function BottomTabs() {
           headerShadowVisible: false,
         }}
       >
-        <Tab.Screen
-          name={EtoroRoutes.Profile}
-          component={ProfileStackNav}
-          options={{
-            headerTitle(props) {
-              return (
-                <Image
-                  style={styles.logo}
-                  source={require("../../assets/etoro-logo.png")}
-                />
-              );
-            },
-            headerTitleStyle: {
-              color: theme.textColor,
-            },
-            tabBarIcon: ({ focused }: any) => (
-              <TabIcon focused={focused} icon={"user"} />
-            ),
-            tabBarLabel: () => <TabLabel />,
-          }}
-        ></Tab.Screen>
-        <Tab.Screen
+           <Tab.Screen
           name={EtoroRoutes.Home}
           component={HomeScreen}
           options={{
@@ -73,7 +52,24 @@ export default function BottomTabs() {
               color: theme.textColor,
             },
             tabBarIcon: ({ focused }: any) => (
-              <TabIcon focused={focused} icon={"user"} />
+              <TabIcon focused={focused} icon={'home'} />
+            ),
+            tabBarLabel: () => <TabLabel />,
+          }}
+        ></Tab.Screen>
+  
+        <Tab.Screen
+          name={EtoroRoutes.Wallet}
+          component={ProfileStackNav}
+          options={{
+            headerTitle(props) {
+              return <Image style={styles.logo} source={require('../../assets/etoro-logo.png')} />;
+            },
+            headerTitleStyle: {
+              color: theme.textColor,
+            },
+            tabBarIcon: ({ focused }: any) => (
+              <TabIcon focused={focused} icon={'wallet'} />
             ),
             tabBarLabel: () => <TabLabel />,
           }}

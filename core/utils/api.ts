@@ -58,7 +58,8 @@ axiosInstance.interceptors.request.use(
       if (addHeaders.auhtorization) {
         console.log('Adding authorization header');
         const authHeader = await AuthService.getAccessToken();
-        console.log('accessToken', authHeader);
+        console.log('token', authHeader);
+
 
         config.headers['Authorization'] = authHeader;
       }

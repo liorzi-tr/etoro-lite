@@ -12,6 +12,11 @@ import Map from './Map';
 import Plus from './Plus';
 import Settings from './Settings';
 import User from './User';
+import Watchlist from './Watchlist';
+import Wallet from './Wallet';
+import Portfolio from './Portfolio';
+import Discover from './Discover';
+import Home from './Home';
 
 interface EtoroIconProps {
   iconName: string;
@@ -33,6 +38,11 @@ const icons: any = {
   mail: Mail,
   close: Close,
   closeSmall: CloseSmall,
+  wallet: Wallet,
+  portfolio: Portfolio,
+  discover: Discover,
+  watchlist: Watchlist,
+  home: Home
 };
 
 export default function EtoroIcon({ iconName, color, size }: EtoroIconProps) {
