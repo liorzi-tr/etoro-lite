@@ -21,6 +21,9 @@ export type EtoroParamList = {
 export enum EtoroRoutes {
   Home = 'Home',
   Profile = 'Profile',
+  Discover = 'Discover',
+  Watchlist = 'Watchlist',
+  Wallet = 'Wallet',
   Portfolio = 'Portfolio',
   Account = 'Account',
   Settings = 'Settings',
