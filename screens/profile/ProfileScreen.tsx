@@ -14,6 +14,7 @@ import { extractNameFromEmail } from '../../core/utils/extractEmail';
 import { EtoroRoutes, EtoroScreenProps } from '../../core/@etoro/types';
 import OuterCard from '../../core/components/atoms/OuterCard';
 import { selectTheme } from '../../store/selectors/themeSelectors';
+import { DisplayedColumnsProvider } from './components/displayedColumns.provider';
 
 export default function ProfileScreen({ navigation }: EtoroScreenProps<EtoroRoutes.Profile>) {
   const theme = useSelector(selectTheme);
@@ -21,6 +22,10 @@ export default function ProfileScreen({ navigation }: EtoroScreenProps<EtoroRout
 
   const handlePress = (): void => {
     navigation.navigate(EtoroRoutes.Account);
+  }
+
+  const navigateToPortfolio = ():void=>{
+    navigation.navigate(EtoroRoutes.Portfolio);
   }
 
   // const handleLogout = (): void => {
@@ -34,6 +39,7 @@ export default function ProfileScreen({ navigation }: EtoroScreenProps<EtoroRout
   //     });
   // };
   return (
+
     <BackgroundGradient
       topColor={theme.topBackgroundColor}
       bottomColor={theme.bottomBackgroundColor}
@@ -69,6 +75,7 @@ export default function ProfileScreen({ navigation }: EtoroScreenProps<EtoroRout
           />
           <Text style={[styles.sections, { color: theme.textColor }]}>Account</Text>
           <SectionButton
+            onPress={navigateToPortfolio}
             label="Payment methods"
             iconLeft="creditCard"
             iconRight="chevronRight"
@@ -88,6 +95,7 @@ export default function ProfileScreen({ navigation }: EtoroScreenProps<EtoroRout
         </OuterCard>
       </ScrollView>
     </BackgroundGradient>
+
   );
 }
 

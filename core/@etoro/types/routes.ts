@@ -1,5 +1,6 @@
 export type EtoroParamList = {
   Profile: any;
+  Portfolio:any;
   Account: any;
   Settings: any;
   Notifications: any;
@@ -15,6 +16,7 @@ export type EtoroParamList = {
 
 export enum EtoroRoutes {
   Profile = 'Profile',
+  Portfolio = 'Portfolio',
   Account = 'Account',
   Settings = 'Settings',
   Notifications = 'Notifications',
