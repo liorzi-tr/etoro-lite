@@ -11,7 +11,8 @@ const interceptorConfig: InterceptorConfig = {
       auhtorization: true,
       applicationidentifier: true,
       accounttype: true,
-      applicationversion: true
+      applicationversion: true,
+      useragent: true
     }
   };
 
@@ -1140,7 +1141,7 @@ const HomeScreen = () => {
   ];
 
 
-  axiosInstance.get('/sapi/userstats/Equity/UserName/bibrasNatcho89?mindate=12/1/2023&client_request_id=93a6ff01-32f4-413d-8552-b3d199f33551',
+  axiosInstance.get('/sapi/userstats/Equity/UserName/cadetlevel2?mindate=12/1/2023&client_request_id=93a6ff01-32f4-413d-8552-b3d199f33551',
     {interceptorConfig}
   ).then((a) =>{
     console.log('biba');

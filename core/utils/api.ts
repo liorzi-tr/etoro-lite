@@ -7,6 +7,7 @@ export interface InterceptorConfig {
   addHeaders?: {
     gatewayAppId?: boolean;
     appDomain?: boolean;
+    useragent?: boolean;
     deviceId?: boolean;
     authenticationToken?: boolean;
     auhtorization?: boolean;
@@ -72,6 +73,11 @@ axiosInstance.interceptors.request.use(
         }
         config.headers['X-Sts-Deviceid'] = deviceId;
       }
+
+      if (addHeaders.useragent) {
+        config.headers['User-Agent'] = 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/537.36 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/537.36';
+      }
+
       if (addHeaders.refreshToken) {
         config.headers['X-Sts-Jwt'] = true;
       }
