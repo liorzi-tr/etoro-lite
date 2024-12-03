@@ -1,20 +1,21 @@
 import axiosInstance, { InterceptorConfig } from '../../utils/api';
 import { LoginDataResponse} from '../../@etoro/types/loginData.interface';
-export class LoginDataService {
-  private readonly baseUrl = 'https://www.etoro.com/api/logindata/v1.1/logindata';
-
+  const baseUrl = 'https://www.etoro.com/api/logindata/v1.1/logindata';
+    const config:InterceptorConfig = {
+        addHeaders:{
+            auhtorization:true
+        }
+    }
   /**
    * Fetch login data from the API.
    * @param clientRequestId The unique client request ID for the API call.
    * @returns A Promise resolving to the LoginDataResponse.
    */
-  public async fetchLoginData(clientRequestId: string): Promise<LoginDataResponse> {
-    const url = `${this.baseUrl}?client_request_id=${clientRequestId}&conditionIncludeDisplayableInstruments=false&conditionIncludeMarkets=false&conditionIncludeMetadata=false&conditionIncludeMirrorValidation=false`;
-
+const   fetchLoginData= async (): Promise<LoginDataResponse> =>{
+    const url = `${baseUrl}?conditionIncludeDisplayableInstruments=false&conditionIncludeMarkets=false&conditionIncludeMetadata=false&conditionIncludeMirrorValidation=false`;
+    
     try {
-      const response = await axiosInstance.get<LoginDataResponse>(url, {
-        withCredentials: true,
-      });
+      const response = await axiosInstance.get<LoginDataResponse>(url,{interceptorConfig:config});
 
       return response.data;
     } catch (error) {
@@ -22,4 +23,5 @@ export class LoginDataService {
       throw error;
     }
   }
-}
+
+  export default fetchLoginData;

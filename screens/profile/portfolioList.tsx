@@ -3,7 +3,7 @@ import { renderMirrorItem } from './components/miroritem';
 import { EtoroRoutes, EtoroScreenProps } from '../../core/@etoro/types';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { fetchInstruments } from '../../core/services/instrumentsRepo';
-
+import  fetchLoginData from '../../core/services/loginData/loginData.service';
 // TypeScript Interfaces
 interface Position {
   PositionID: number;
@@ -70,8 +70,8 @@ const sampleMirrors: Mirror[] = [
 
 export default function Portfolio({ navigation }: EtoroScreenProps<EtoroRoutes.Portfolio>){
     const  queryClient = useQueryClient();
-    const {isLoading,error,data} = useQuery({queryKey:['instrumentMeta'], queryFn:fetchInstruments, })
-    
+    const {isLoading,error,data} = useQuery({queryKey:['instrumentMeta'], queryFn:()=>Promise.all([fetchInstruments(),fetchLoginData()]), })
+     
   if (isLoading) {
     return (
       <View style={styles.loaderContainer}>

@@ -30,8 +30,8 @@ interface ResultInstrument {
 }
 const API_URL_BULK = 'https://api.etorostatic.com/sapi/instrumentsmetadata/V1.1/instruments/bulk?bulkNumber=1&totalBulks=1';
 const API_URL_CLOSING = 'https://api.etorostatic.com/sapi/candles/closingprices.json';
-let cashing=null;
-export const fetchInstruments = async (): Promise<ResultInstrument[]> => {
+const instrumentLookup:{[key:number]:ResultInstrument}={};
+export const fetchInstruments = async (): Promise<{[key:number]:ResultInstrument}> => {
   try {
     const [bulk,closing] = await Promise.all([axiosInstance.get<{InstrumentDisplayDatas:InstrumentBulk[]}>(API_URL_BULK,{timeout:30000}),
         axiosInstance.get<ClosingPricesResponse[]>(API_URL_CLOSING,{timeout:30000})]);
@@ -45,18 +45,24 @@ export const fetchInstruments = async (): Promise<ResultInstrument[]> => {
 const mapInstruments = (
     instrumentBulk: InstrumentBulk[],
     closingPrices: ClosingPricesResponse[]
-  ): ResultInstrument[] => {
+  ): {[key:number]:ResultInstrument} => {
     const closingPricesMap = closingPrices.reduce((acc, closingPrice) => {
       acc[closingPrice.InstrumentId] = closingPrice;
       return acc;
     }, {} as { [key: number]: ClosingPricesResponse });
   
-    return instrumentBulk.map(instrument => {
+     instrumentBulk.forEach(instrument => {
       const closingPrice = closingPricesMap[instrument.InstrumentID];
+      instrumentLookup[instrument.InstrumentID] ={
+        ...instrument,
+        IsMarketOpen: closingPrice ? closingPrice.IsMarketOpen : false,
+        OfficialClosingPrice: closingPrice ? closingPrice.OfficialClosingPrice : 0,
+      };
       return {
         ...instrument,
         IsMarketOpen: closingPrice ? closingPrice.IsMarketOpen : false,
         OfficialClosingPrice: closingPrice ? closingPrice.OfficialClosingPrice : 0,
       };
     });
+    return instrumentLookup;
   };
