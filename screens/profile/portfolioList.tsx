@@ -5,6 +5,9 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { fetchInstruments, ResultInstrument } from '../../core/services/instrumentsRepo';
 import  fetchLoginData from '../../core/services/loginData/loginData.service';
 import { LoginDataResponse } from '../../core/@etoro/types/loginData.interface';
+import { useSelector } from "react-redux";
+import { selectTheme } from "../../store/selectors/themeSelectors";
+import { useEffect } from "react";
 // TypeScript Interfaces
 interface Position {
   PositionID: number;
@@ -71,18 +74,19 @@ const sampleMirrors: Mirror[] = [
 
 export default function Portfolio({ navigation }: EtoroScreenProps<EtoroRoutes.Portfolio>){
     const  queryClient = useQueryClient();
-    
+    const theme = useSelector(selectTheme);
+
     const {isLoading,error,data} = useQuery({queryKey:['instrumentMeta'], queryFn:async ()=>{
         const [instruments, loginData] = await Promise.all([
             fetchInstruments(),
             fetchLoginData()
           ]);
           return groupPositionsWithInstruments(loginData, instruments);}, })
-     
+
   if (isLoading) {
     return (
       <View style={styles.loaderContainer}>
-        <ActivityIndicator size="large" color="#0000ff" />
+        <ActivityIndicator size="large" color={theme.primaryColor} />
       </View>
     );
   }
@@ -96,14 +100,13 @@ export default function Portfolio({ navigation }: EtoroScreenProps<EtoroRoutes.P
   }
   return (
     <>
- 
+
     <FlatList
       data={data}
       renderItem={(item)=>renderMirrorItem({item:item.item,
-        onPress:()=>navigation.navigate(EtoroRoutes.MarketPage, { instrument:item.item.instrument.SymbolFull })
-      })}
+        onPress:()=> navigation.navigate(EtoroRoutes.MarketPage, { instrument:item.item.instrument.SymbolFull })})}
       keyExtractor={(mirror) => mirror.instrument.InstrumentID.toString()}
-      contentContainerStyle={styles.container}
+      contentContainerStyle={[styles.container, { backgroundColor: theme.topBackgroundColor }]}
     />
     </>
   );
@@ -113,7 +116,7 @@ const styles = StyleSheet.create({
   container: {
     padding: 16,
   },
- 
+
   row: {
     flexDirection: "row",
     alignItems: "center",
@@ -171,12 +174,12 @@ export const groupPositionsWithInstruments = (
     instruments: {[key: number]: ResultInstrument}
   ): PositionGroup[] => {
     const groupedPositions: {[key: number]: PositionGroup} = {};
-  
+
     // Group positions by InstrumentID and add instrument data
     loginData.AggregatedResult?.ApiResponses?.PrivatePortfolio?.Content.ClientPortfolio?.Positions.forEach(position => {
       const instrumentId = position.InstrumentID;
       const instrument = instruments[instrumentId];
-  
+
       if (!groupedPositions[instrumentId]) {
         groupedPositions[instrumentId] = {
           instrument,
@@ -184,10 +187,10 @@ export const groupPositionsWithInstruments = (
           totalUnits: 0
         };
       }
-  
+
       groupedPositions[instrumentId].positions.push(position);
       groupedPositions[instrumentId].totalUnits += position.Amount;
     });
-  
+
     return Object.values(groupedPositions);
   };

@@ -333,6 +333,7 @@ const styles = StyleSheet.create({
   username: {
     fontWeight: 600,
     fontSize: 22,
+    marginTop: 16,
   },
   acountValue: {
     fontWeight: 800,

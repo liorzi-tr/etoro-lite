@@ -75,22 +75,7 @@ export default function BottomTabs() {
             tabBarLabel: () => <TabLabel />,
           }}
         ></Tab.Screen>
-        <Tab.Screen
-          name={EtoroRoutes.Search}
-          component={SearchScreen}
-          options={{
-            headerTitle(props) {
-              return <Image style={styles.logo} source={require('../../assets/etoro-logo.png')} />;
-            },
-            headerTitleStyle: {
-              color: theme.textColor,
-            },
-            tabBarIcon: ({ focused }: any) => (
-              <TabIcon focused={focused} icon={'search'} />
-            ),
-            tabBarLabel: () => <TabLabel />,
-          }}
-        ></Tab.Screen>
+
         <Tab.Screen
           name={EtoroRoutes.Profile}
           component={ProfileStackNav}

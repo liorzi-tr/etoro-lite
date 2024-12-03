@@ -19,22 +19,21 @@ export  default function renderMirrorItem({ item, onPress }: RenderItemProps) {
         <Image style={{
             width: 50,
             height: 50,
-            borderRadius:6,
+            borderRadius:8,
             borderWidth:  instrument.IsMarketOpen?1:0,
-            borderColor:'#00ff00' 
+            borderColor:'#00ff00'
         }
         }
         source={{uri:item.instrument.Images[0].Uri}}/>
         <View style={{
             flexDirection:'column',
             paddingBlockStart:3,
-            paddingInlineStart:3
+            paddingInlineStart:3,
+            gap:5,
         }}>
 
         <Text style={styles.instrumentName}>{instrument.InstrumentDisplayName}</Text>
-        <Text style={styles.symbolText}>
-            
-            {instrument.SymbolFull}</Text>
+        <Text style={styles.symbolText}>{instrument.SymbolFull}</Text>
         </View>
       </View>
 
@@ -53,7 +52,7 @@ export  default function renderMirrorItem({ item, onPress }: RenderItemProps) {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
-    borderRadius: 8,
+    borderRadius: 16,
     padding: 16,
     marginVertical: 8,
     shadowColor: '#000',
@@ -61,7 +60,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
-    flexDirection:'row'
+    flexDirection:'row',
+    minHeight: 130,
   },
   header: {
     flexDirection: 'row',
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     width: '30%'
   },
   instrumentName: {
-    fontSize: 18,
+    fontSize: 14,
     fontWeight: 'bold',
   },
   symbolText: {
