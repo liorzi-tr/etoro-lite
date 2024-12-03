@@ -34,7 +34,9 @@ class AuthService {
   // Optionally, add a method to clear tokens on logout
   async clearTokens() {
     this.accessToken = null;
+    this.refreshToken = null;
     await AsyncStorage.removeItem('accessToken');
+    await AsyncStorage.removeItem('refreshToken');
   }
 }
 

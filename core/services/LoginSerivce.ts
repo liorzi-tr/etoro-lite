@@ -51,6 +51,7 @@ class LoginService {
         gatewayAppId: true,
         appDomain: true,
         deviceId: true,
+        authenticationToken: true,
       },
       categories: ['Login'],
        monitoringSecuredCall: {

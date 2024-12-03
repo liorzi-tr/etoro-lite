@@ -4,6 +4,7 @@ import { Credentials, isLoginMissingScopes, isTwoFactorResponse } from '../../co
 import AuthService from '../../core/services/AuthService';
 import { setTwoFactorRequired } from './twoFactorSlice';
 import loginSerivce from '../../core/services/LoginSerivce';
+import LogoutService from '../../core/services/LogoutService';
 
 interface AuthState {
   isAuthenticated: boolean;
@@ -29,9 +30,10 @@ export const checkAuthentication = createAsyncThunk(
       const refreshToken = await AuthService.getRefreshToken();
       if (refreshToken) {
         await loginSerivce.refreshToken();
+      } else {
+        logout();
       }
     }
-    setAuthenticatedFalse();
   }
 );
 
