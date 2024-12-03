@@ -1,12 +1,12 @@
 // authService.ts
 import * as SecureStore from 'expo-secure-store';
-import { TwoFactorResponse } from '../@etoro/types/auth';
+import { LoginResponse } from '../@etoro/types/auth';
 
 class AuthService {
   private authenticationToken: string | null = null;
   private refreshToken: string | null = null;
 
-  async setSts(stsData: TwoFactorResponse) {
+  async setSts(stsData: LoginResponse) {
     this.refreshToken = stsData.token.jwt;
     console.log('Setting authentication token:', stsData.token.jwt);
 

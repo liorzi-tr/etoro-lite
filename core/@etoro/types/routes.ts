@@ -4,6 +4,7 @@ export type EtoroParamList = {
   Profile: any;
   Portfolio:any;
   Account: any;
+  Home: any;
   Settings: any;
   Notifications: any;
   BottomTabs: any;
@@ -18,6 +19,7 @@ export type EtoroParamList = {
 };
 
 export enum EtoroRoutes {
+  Home = 'Home',
   Profile = 'Profile',
   Portfolio = 'Portfolio',
   Account = 'Account',

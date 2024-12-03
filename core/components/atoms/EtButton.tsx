@@ -60,7 +60,7 @@ const EtButton = ({
       <Pressable
         disabled={disabled}
         onPress={onPress}
-        style={{  }}
+        style={style}
 
       >
         {icon && <EtoroIcon iconName={icon} size={20} color={iconColor} />}

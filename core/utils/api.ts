@@ -11,6 +11,9 @@ export interface InterceptorConfig {
     authenticationToken?: boolean;
     auhtorization?: boolean;
     refreshToken?: boolean;
+    applicationidentifier?: boolean;
+    applicationversion?: boolean;
+    accounttype?: boolean;
   };
   categories?: string[];
   monitoringSecuredCall?: {
@@ -39,6 +42,18 @@ axiosInstance.interceptors.request.use(
         console.log('Adding authorization header');
         const authHeader = await AuthService.getRefreshToken();
         config.headers['Authorization'] = authHeader; 
+      }
+
+      if (addHeaders.accounttype) {
+        config.headers['Accounttype'] = 'Real';
+      }
+
+      if (addHeaders.applicationversion) {
+        config.headers['Applicationversion'] = 'debug';
+      }
+
+      if (addHeaders.applicationidentifier) {
+        config.headers['Applicationidentifier'] = 'ReToro';
       }
 
       if (addHeaders.gatewayAppId) {

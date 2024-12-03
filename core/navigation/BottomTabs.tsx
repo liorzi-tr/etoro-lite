@@ -6,6 +6,7 @@ import ProfileStackNav from '../../screens/profile/ProfileStackNav';
 import { selectTheme } from '../../store/selectors/themeSelectors';
 import { useSelector } from 'react-redux';
 import { EtoroParamList, EtoroRoutes } from '../@etoro/types';
+import HomeScreen from '../../screens/home/HomeScreen';
 
 const Tab = createBottomTabNavigator<EtoroParamList>();
 
@@ -36,6 +37,22 @@ export default function BottomTabs() {
         <Tab.Screen
           name={EtoroRoutes.Profile}
           component={ProfileStackNav}
+          options={{
+            headerTitle(props) {
+              return <Image style={styles.logo} source={require('../../assets/etoro-logo.png')} />;
+            },
+            headerTitleStyle: {
+              color: theme.textColor,
+            },
+            tabBarIcon: ({ focused }: any) => (
+              <TabIcon focused={focused} icon={'user'} />
+            ),
+            tabBarLabel: () => <TabLabel />,
+          }}
+        ></Tab.Screen>
+        <Tab.Screen
+          name={EtoroRoutes.Home}
+          component={HomeScreen}
           options={{
             headerTitle(props) {
               return <Image style={styles.logo} source={require('../../assets/etoro-logo.png')} />;
