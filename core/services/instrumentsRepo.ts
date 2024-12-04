@@ -29,7 +29,7 @@ export interface ResultInstrument {
     OfficialClosingPrice:number
 }
 const API_URL_BULK = 'https://api.etorostatic.com/sapi/instrumentsmetadata/V1.1/instruments/bulk?bulkNumber=1&totalBulks=1';
-const API_URL_CLOSING = 'https://api.etorostatic.com/sapi/candles/closingprices.json';
+const API_URL_CLOSING = 'https://api.etorostatic.com/sapi/candles/closingprices.json?cv=44f5cfa02ed05d42a068668d0842ee12_381abbadda3aedf52b65fa3f4000a378';
 const instrumentLookup:{[key:number]:ResultInstrument}={};
 export const fetchInstruments = async (): Promise<{[key:number]:ResultInstrument}> => {
   try {
