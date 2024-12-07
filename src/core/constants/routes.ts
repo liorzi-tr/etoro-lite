@@ -1,0 +1,23 @@
+
+export const routes = {
+  Home: 'Home',
+  Profile: 'Profile',
+  Discover: 'Discover',
+  Watchlist: 'Watchlist',
+  Search: 'Search',
+  Wallet: 'Wallet',
+  Portfolio: 'Portfolio',
+  Account: 'Account',
+  Settings: 'Settings',
+  Notifications: 'Notifications',
+  Auth: 'Auth',
+  AuthStack: 'AuthStack',
+  TwoFactor: 'TwoFactor',
+  BottomTabs: 'BottomTabs',
+  MarketPage: 'MarketPage',
+  OnboardingStack: 'OnboardingStack',
+  FirstOnboarding: 'FirstOnboarding',
+  SecondOnboarding: 'SecondOnboarding',
+  Login: 'Login',
+  Signup: 'Signup',
+} as const;
