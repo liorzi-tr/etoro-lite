@@ -54,7 +54,7 @@ export default function MainBottomTabs() {
             tabBarIcon: ({ focused }: any) => (
               <TabIcon focused={focused} icon={'home'} />
             ),
-            tabBarLabel: () => <TabLabel />,
+            tabBarLabel: ({focused}) => <TabLabel focused={focused} label="Home" />,
           }}
         ></Tab.Screen>
         <Tab.Screen
@@ -70,7 +70,7 @@ export default function MainBottomTabs() {
             tabBarIcon: ({ focused }: any) => (
               <TabIcon focused={focused} icon={'portfolio'} />
             ),
-            tabBarLabel: () => <TabLabel />,
+            tabBarLabel: ({focused}) => <TabLabel focused={focused} label="Portfolio" />,
           }}
         ></Tab.Screen>
 
@@ -87,7 +87,7 @@ export default function MainBottomTabs() {
             tabBarIcon: ({ focused }: any) => (
               <TabIcon focused={focused} icon={'user'} />
             ),
-            tabBarLabel: () => <TabLabel />,
+            tabBarLabel: ({focused}) => <TabLabel focused={focused} label="Profile" />,
           }}
         ></Tab.Screen>
       </Tab.Navigator>

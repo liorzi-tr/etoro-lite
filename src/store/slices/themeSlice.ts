@@ -1,29 +1,35 @@
 // slices/themeSlice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Appearance } from 'react-native';
 import { AppDispatch } from '../store';
+import { Appearance } from 'react-native';
 
 interface ThemeState {
   mode: 'light' | 'dark';
 }
 
 const initialState: ThemeState = {
-  mode: Appearance.getColorScheme() || 'light',
+  mode: Appearance.getColorScheme() || 'dark',
 };
 
 // Thunk to initialize theme and set up listener
 export const initializeTheme = () => (dispatch: AppDispatch) => {
+  console.log('initializeTheme');
+  console.log('current mode', Appearance.getColorScheme());
+
+  console.log('initialState mode', initialState.mode);
+
+
   const colorScheme = Appearance.getColorScheme() || 'light';
   dispatch(setTheme(colorScheme));
 
   const listener = ({ colorScheme }: any) => {
+    console.log('colorScheme changed to', colorScheme);
     dispatch(setTheme(colorScheme || 'light'));
   };
 
-  Appearance.addChangeListener(listener);
+  const subscription = Appearance.addChangeListener(listener);
 
-  // Optionally, return a cleanup function if needed
-  // This can be handled in a component's useEffect cleanup
+  return () => subscription.remove();
 };
 
 

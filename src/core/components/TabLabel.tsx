@@ -3,10 +3,11 @@ import { useSelector } from 'react-redux';
 import { selectTheme } from '../../store/selectors/themeSelectors';
 
 interface TabLabelProps {
+  focused: boolean;
   label?: string;
 }
 
-export default function TabLabel({ label }: TabLabelProps) {
+export default function TabLabel({ focused, label }: TabLabelProps) {
   const theme = useSelector(selectTheme);
 
   return (
@@ -15,7 +16,7 @@ export default function TabLabel({ label }: TabLabelProps) {
         top: 20,
       }}
     >
-      <Text style={{ color: theme.textColor, fontSize: 12 }}>
+      <Text style={{ color: focused ? theme.primaryColor : theme.textInfoColor, fontSize: 12 }}>
         {label}
       </Text>
     </View>
