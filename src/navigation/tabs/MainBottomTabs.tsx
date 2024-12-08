@@ -25,9 +25,9 @@ export default function MainBottomTabs() {
           tabBarStyle: {
             display: "flex",
             elevation: 5,
+            height: 90,
             backgroundColor: theme.bottomTabsColor,
             borderTopColor: theme.borderColor,
-            // borderTopWidth: 0,
           },
           headerStyle: {
             height: 100,
@@ -36,7 +36,7 @@ export default function MainBottomTabs() {
           headerShadowVisible: false,
         }}
       >
-           <Tab.Screen
+        <Tab.Screen
           name={routes.Home}
           component={HomeScreen}
           options={{
@@ -54,7 +54,7 @@ export default function MainBottomTabs() {
             tabBarIcon: ({ focused }: any) => (
               <TabIcon focused={focused} icon={'home'} />
             ),
-            tabBarLabel: ({focused}) => <TabLabel focused={focused} label="Home" />,
+            tabBarLabel: ({ focused }) => <TabLabel focused={focused} label="Home" />,
           }}
         ></Tab.Screen>
         <Tab.Screen
@@ -70,7 +70,7 @@ export default function MainBottomTabs() {
             tabBarIcon: ({ focused }: any) => (
               <TabIcon focused={focused} icon={'portfolio'} />
             ),
-            tabBarLabel: ({focused}) => <TabLabel focused={focused} label="Portfolio" />,
+            tabBarLabel: ({ focused }) => <TabLabel focused={focused} label="Portfolio" />,
           }}
         ></Tab.Screen>
 
@@ -87,7 +87,7 @@ export default function MainBottomTabs() {
             tabBarIcon: ({ focused }: any) => (
               <TabIcon focused={focused} icon={'user'} />
             ),
-            tabBarLabel: ({focused}) => <TabLabel focused={focused} label="Profile" />,
+            tabBarLabel: ({ focused }) => <TabLabel focused={focused} label="Profile" />,
           }}
         ></Tab.Screen>
       </Tab.Navigator>
