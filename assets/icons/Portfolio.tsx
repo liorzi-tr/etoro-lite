@@ -1,12 +1,17 @@
 import React from 'react';
 import { Svg, G, Path, Circle } from 'react-native-svg';
+import { selectTheme } from '../../src/store/selectors/themeSelectors';
+import { useSelector } from 'react-redux';
 
-const Portfolio = ({ size = 24, color = 'gray', hasFill = false, fill = 'none' }) => (
-  <Svg width={size} height={size} viewBox="0 0 24 24">
-    <G fill={hasFill ? fill : 'none'} stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <Path d="M9 11v9m0-9H4.6c-.56 0-.84 0-1.054.109a1 1 0 0 0-.437.437C3 11.76 3 12.04 3 12.6V20h6m0-9V5.6c0-.56 0-.84.109-1.054a1 1 0 0 1 .437-.437C9.76 4 10.04 4 10.6 4h2.8c.56 0 .84 0 1.054.109c.188.096.34.249.437.437C15 4.76 15 5.04 15 5.6V8M9 20h6m0 0h6V9.6c0-.56 0-.84-.11-1.054a1 1 0 0 0-.435-.437C20.24 8 19.96 8 19.4 8H15m0 12V8" />
-    </G>
-  </Svg>
-);
+const Portfolio = ({ size = 24, color = 'gray', hasFill = false, fill = 'none' }) => {
+  const theme = useSelector(selectTheme);
+  return(
+    <Svg width={size} height={size} viewBox="0 0 16 16">
+      <G fill={theme.textInfoColor} strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+        <Path fill={color ? color : theme.textInfoColor} d="M8 1.5a.5.5 0 0 1 .5-.5A6.5 6.5 0 0 1 15 7.5a.5.5 0 0 1-.5.5h-6a.5.5 0 0 1-.5-.5zM7 3.522a.5.5 0 0 0-.545-.498a6 6 0 1 0 6.52 6.52a.5.5 0 0 0-.497-.544H7z" />
+      </G>
+    </Svg>
+  );
+};
 
 export default Portfolio;

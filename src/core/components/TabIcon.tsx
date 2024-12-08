@@ -24,7 +24,7 @@ export default function TabIcon({ focused, icon }: TabIconProps) {
         color={
           focused
             ? theme.primaryColor
-            : theme.textColor
+            : theme.textInfoColor
         }
       />
     </View>
