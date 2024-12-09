@@ -4,6 +4,31 @@ import { LineChart } from "react-native-chart-kit";
 import axiosInstance, { InterceptorConfig } from "../../core/utils/api";
 import { useSelector } from "react-redux";
 import { selectTheme } from "../../store/selectors/themeSelectors";
+import {
+    requestPermission,
+    startListenDeviceMotionUpdates,
+    stopDeviceMotionUpdates,
+    onDeviceMotionUpdates,
+  } from 'react-native-headphone-motion';
+  
+  // Request permission to access motion data
+  requestPermission().then((status) => {
+    console.log('status', status);
+    if (status === 'authorized') {
+      // Start listening to device motion updates
+      startListenDeviceMotionUpdates();
+  
+      // Subscribe to motion updates
+      const subscription = onDeviceMotionUpdates((data) => {
+        console.log('Motion Data:', data);
+      });
+  
+      // Remember to stop updates and remove the listener when done
+      // stopDeviceMotionUpdates();
+      // subscription.remove();
+    }
+  });
+  
 
 const interceptorConfig: InterceptorConfig = {
     addHeaders: {
