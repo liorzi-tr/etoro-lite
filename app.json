@@ -13,7 +13,10 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSMotionUsageDescription": "The app requires access to motion data to enable AirPods motion features."
+      }
     },
     "android": {
       "adaptiveIcon": {
