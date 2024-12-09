@@ -4,6 +4,7 @@ export type RootStackParamList = {
 };
 
 export type AuthStackParamList = {
+  BioAuth: any;
   Auth: any;
   Login: any;
   Signup: any;

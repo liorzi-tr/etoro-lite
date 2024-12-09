@@ -10,6 +10,7 @@ export const routes = {
   Account: 'Account',
   Settings: 'Settings',
   Notifications: 'Notifications',
+  BioAuth: 'BioAuth',
   Auth: 'Auth',
   AuthStack: 'AuthStack',
   TwoFactor: 'TwoFactor',

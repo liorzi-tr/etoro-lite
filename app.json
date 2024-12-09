@@ -13,13 +13,17 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSFaceIDUsageDescription": "This app uses Face ID to secure your data."
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/touch-icon-ipad-144.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": ["USE_BIOMETRIC", "USE_FINGERPRINT"]
     },
     "web": {
       "favicon": "./assets/favicon.png"
