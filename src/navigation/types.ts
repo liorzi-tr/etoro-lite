@@ -1,3 +1,5 @@
+import { AggregatedLoginResponse } from "../features/home/types";
+
 export type RootStackParamList = {
   AuthNavigator: undefined;
   MainNavigator: undefined;
@@ -19,7 +21,7 @@ export type OnboardingStackParamList = {
 };
 
 export type MainBottomTabParamList = {
-  Home: any;
+  Home: AggregatedLoginResponse;
   Profile: any;
   Portfolio: any;
   Account: any;

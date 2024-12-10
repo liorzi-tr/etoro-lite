@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Button, Alert, ActivityIndicator, StyleSheet } from 'react-native';
 import * as LocalAuthentication from 'expo-local-authentication';
-import { saveSecureData, getSecureData } from '../utils/secureStore';
+import { saveSecureData, getSecureData } from '../../features/auth/utils/secureStore';
 import { useNavigation } from '@react-navigation/native';
 import { RootNavigationProp } from '../../navigation/params';
 

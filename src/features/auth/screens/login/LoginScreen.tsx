@@ -16,11 +16,11 @@ import { selectTheme } from '../../../../store/selectors/themeSelectors';
 import LoginService from '../../../../core/services/LoginSerivce';
 import { setTwoFactorRequired } from '../../../../store/slices/twoFactorSlice';
 import { setAuthenticatedTrue } from '../../../../store/slices/authSlice';
-import AuthService from '../../../../core/services/AuthService';
 import { Credentials, isLoginMissingScopes, isTwoFactorResponse, LoginResponse } from '../../types';
 import { routes } from '../../../../core/constants/routes';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { AuthStackProp, LoginRouteProp } from '../../../../navigation/params';
+import { saveSecureData } from '../../utils/secureStore';
 
 const LoginScreen = () => {
   const navigation = useNavigation<AuthStackProp>();
@@ -47,7 +47,7 @@ const LoginScreen = () => {
 
   const loginSuccessHandler = async (data: LoginResponse) => {
     if (isTwoFactorResponse(data)) {
-      await AuthService.setTwoFactorToken(data);
+      await saveSecureData('twoFactorToken', data.token.jwt);
       dispatch(setTwoFactorRequired(data));
       navigation.goBack();
       navigation.navigate(routes.TwoFactor);
@@ -55,10 +55,10 @@ const LoginScreen = () => {
     }
 
     if (isLoginMissingScopes(data)) {
-      // Handle missing scopes
       return;
     }
-    AuthService.setRefreshToken(data);
+
+    await saveSecureData('refreshToken', data.token.jwt);
     await LoginService.refreshToken();
     navigation.goBack();
     dispatch(setAuthenticatedTrue());
@@ -66,12 +66,11 @@ const LoginScreen = () => {
 
   const loginErrorHandler = (error: any) => {
     setErrorMessage('Login failed. Please try again.');
-    // Additional error handling based on error object
   };
 
   const handleSignUp = () => {
     navigation.goBack();
-    navigation.navigate({ name: routes.Signup, params: { } });
+    navigation.navigate({ name: routes.Signup, params: {} });
   };
 
   return (

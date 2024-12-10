@@ -1,7 +1,7 @@
 // LoginService.ts
-import { Credentials, LoginResponse, TwoFactorResponse } from "../../src/core/@etoro/types/auth";
+import { Credentials, LoginResponse, TwoFactorResponse } from "../../features/auth/types";
+import { saveSecureData } from "../../features/auth/utils/secureStore";
 import axiosInstance, { InterceptorConfig } from "../utils/api";
-import AuthService from "./AuthService";
 
 class LoginService {
   private _exchangeRequest: Promise<any> | null = null;
@@ -58,9 +58,9 @@ class LoginService {
         authenticationToken: true,
       },
       categories: ['Login'],
-       monitoringSecuredCall: {
+      monitoringSecuredCall: {
         AuthenticationProviderData: true
-       }
+      }
     };
 
     try {
@@ -112,8 +112,7 @@ class LoginService {
         stsData.expiresInMs = stsData.token?.expiresInMs;
         stsData.antiCsrfToken = '';
         stsData.expirationUnixTimeMs = Date.now() + stsData.expiresInMs;
-
-        AuthService.setAccessToken(stsData); // Implement authService
+        await saveSecureData('accessToken', stsData.accessToken);
 
         if (stsData.accessToken && stsData.expirationUnixTimeMs) {
           this.startRefreshTokenTimer(stsData.expirationUnixTimeMs);
@@ -168,7 +167,7 @@ class LoginService {
 
       const authenticationData = response.data;
       console.log('verifyTwoFactor - response:', response);
-      AuthService.setRefreshToken(authenticationData);
+      await saveSecureData('refreshToken', authenticationData.token.jwt);
       authenticationData.expirationUnixTimeMs = Date.now() + authenticationData.token.expiresInMs - this.getExchangeGrace();
 
       return authenticationData;

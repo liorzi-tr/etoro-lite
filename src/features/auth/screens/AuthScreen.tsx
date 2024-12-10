@@ -12,58 +12,88 @@ import { selectTheme } from '../../../store/selectors/themeSelectors';
 import { routes } from '../../../core/constants/routes';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { AuthRouteProp, AuthStackProp } from '../../../navigation/params';
+import { useEffect, useState } from 'react';
+import { isBiometricSupported } from '../utils/biometic';
+import BiometricButton from '../components/BiometricButton';
+import { showBiometricPrompt } from '../services/BiometricLoginService';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../../store/store';
 
 export default function AuthScreen() {
+  const dispatch = useDispatch<AppDispatch>();
   const navigation = useNavigation<AuthStackProp>();
   const route = useRoute<AuthRouteProp>();
   const theme = useSelector(selectTheme);
+  const [isBiometricAvailable, setIsBiometricAvailable] = useState(false);
 
-  const handlePress = (route: any): void => {
+  useEffect(() => {
+    isBiometricSupported().then((isSupported) => setIsBiometricAvailable(isSupported));
+  }, []);
+
+  const onContinueWithEmail = (route: any): void => {
     navigation.navigate(route);
   };
+
+  const onUseBiometric = async (): Promise<void> => {
+    console.log('onUseBiometric');
+    await showBiometricPrompt(dispatch, navigation);
+  };
+
   return (
-    <ScrollView contentContainerStyle={{flex: 1, }}>
-    <BackgroundGradient
-      topColor={theme.topBackgroundColor}
-      bottomColor={theme.bottomBackgroundColor}
-    >
-      <Animated.View style={styles.container} entering={FadeIn}>
-        <Animated.View style={styles.header} entering={FadeIn}>
-          <Image
-            source={require('../../../../assets/images/etoro-logo.png')}
-            style={styles.headerLogo}
-          />
-        </Animated.View>
-        <Animated.View
-          style={{ gap: 10 }}
-          entering={FadeInLeft.duration(600).stiffness(3)}
-        >
-          <Text style={[styles.headerTitle, { color: theme.textColor }]}>Explore Top Markets!</Text>
-          <Text style={[globalStyles.text, { textAlign: 'center', color: theme.textColor }]}>
-            Please choose how you want to continue setting up your account.
-          </Text>
-        </Animated.View>
-        <Animated.View entering={FadeInDown.duration(600).delay(400)}>
-          <Image
-            source={require('../../../../assets/images/etoro-authstack.png')}
-            style={styles.authStackImage}
-          />
-        </Animated.View>
-        <View style={styles.footer}>
-          <Animated.View
-            style={styles.buttonContainer}
-            entering={FadeInDown.delay(800).duration(700)}
-          >
-            <EtButton
-              title="Continue with Email"
-              color={theme.primaryColor}
-              onPress={handlePress.bind(null, routes.Login)}
-              style={styles.button}
+    <ScrollView contentContainerStyle={{ flex: 1, }}>
+      <BackgroundGradient
+        topColor={theme.topBackgroundColor}
+        bottomColor={theme.bottomBackgroundColor}
+      >
+        <Animated.View style={styles.container} entering={FadeIn}>
+          <Animated.View style={styles.header} entering={FadeIn}>
+            <Image
+              source={require('../../../../assets/images/etoro-logo.png')}
+              style={styles.headerLogo}
             />
           </Animated.View>
-        </View>
-      </Animated.View>
-    </BackgroundGradient>
+          <Animated.View
+            style={{ gap: 10 }}
+            entering={FadeInLeft.duration(600).stiffness(3)}
+          >
+            <Text style={[styles.headerTitle, { color: theme.textColor }]}>Explore Top Markets!</Text>
+            <Text style={[globalStyles.text, { textAlign: 'center', color: theme.textColor }]}>
+              Please choose how you want to continue setting up your account.
+            </Text>
+          </Animated.View>
+          <Animated.View entering={FadeInDown.duration(600).delay(400)}>
+            <Image
+              source={require('../../../../assets/images/etoro-authstack.png')}
+              style={styles.authStackImage}
+            />
+          </Animated.View>
+          <View style={styles.footer}>
+            <Animated.View
+              style={styles.buttonContainer}
+              entering={FadeInDown.delay(800).duration(700)}
+            >
+              {isBiometricAvailable && (
+                <Animated.View
+                  style={styles.buttonContainer}
+                  entering={FadeInDown.delay(800).duration(700)}
+                >
+                  <BiometricButton
+                    color={theme.primaryColor}
+                    onPress={onUseBiometric}
+                    style={styles.biometricButton}
+                  />
+                </Animated.View>
+              )}
+              <EtButton
+                title="Continue with Email"
+                color={theme.primaryColor}
+                onPress={onContinueWithEmail.bind(null, routes.Login)}
+                style={styles.button}
+              />
+            </Animated.View>
+          </View>
+        </Animated.View>
+      </BackgroundGradient>
     </ScrollView>
   );
 }
@@ -72,12 +102,11 @@ const styles = StyleSheet.create({
   container: {
     ...globalStyles.container,
     marginTop: 30,
-    justifyContent: 'space-around',
+    justifyContent: 'space-evenly',
   },
   header: {
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
-    marginBottom: 30,
   },
   headerLogo: {
     height: 40,
@@ -102,10 +131,14 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     width: '100%',
-    gap: 8,
+    gap: 25,
   },
   button: {
     width: '100%',
+    alignItems: 'center',
+    alignSelf: 'center',
+  },
+  biometricButton: {
     alignItems: 'center',
     alignSelf: 'center',
   }

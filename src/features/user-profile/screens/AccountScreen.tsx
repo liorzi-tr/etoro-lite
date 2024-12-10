@@ -1,54 +1,32 @@
-import { View, Text, StyleSheet, Button, TextInput } from 'react-native';
-import { useSelector } from 'react-redux';
-import { useState } from 'react';
-import { MainTabParamList } from '../../../navigation/types';
-import { selectTheme } from '../../../store/selectors/themeSelectors';
-import { routes } from '../../../core/constants/routes';
+import { View, StyleSheet, Text } from "react-native";
+import Toggle from "../../../core/components/Toggle";
+import { useState } from "react";
+import { selectTheme } from "../../../store/selectors/themeSelectors";
+import { useSelector } from "react-redux";
 
-export default function AccountScreen({ navigation }: MainTabParamList['Account']) {
+export default function AccountScreen() {
   const theme = useSelector(selectTheme);
-  const [instrument, setInstrument] = useState<string>('btc'); // Default to 'btc'
+  const [isEnabled, setIsEnabled] = useState(false);
 
-  const navigateToMarketPage = () => {
-    navigation.navigate(routes.MarketPage, { instrument });
-  };
+  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
   return (
     <View style={[styles.container, { backgroundColor: theme.topBackgroundColor }]}>
-      <Text style={[styles.text, { color: theme.textColor }]}>Account Screen</Text>
-
-      {/* Input field to set the instrument dynamically */}
-      <TextInput
-        style={[styles.input, { color: theme.textColor, borderColor: theme.borderColor }]}
-        value={instrument}
-        onChangeText={setInstrument}
-        placeholder="Enter instrument (e.g. BTC)"
-        placeholderTextColor={theme.textColor}
-      />
-
-      <Button title={`Open Market Page (${instrument.toUpperCase()})`} onPress={navigateToMarketPage} />
+      <Toggle value={isEnabled} onValueChange={toggleSwitch} />
+      <Text style={[styles.text, { color: theme.textColor }]}>Activate Biometric Authentication</Text>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
     justifyContent: 'center',
-    padding: 20,
+    alignItems: 'center',
   },
   text: {
     fontSize: 16,
-    marginBottom: 10,
-  },
-  input: {
-    width: '80%',
-    height: 40,
-    borderWidth: 1,
-    borderRadius: 5,
-    paddingLeft: 10,
-    marginBottom: 20,
+    fontWeight: 'bold',
     marginTop: 10,
   },
 });

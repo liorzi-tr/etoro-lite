@@ -5,20 +5,12 @@ import AuthScreen from '../../features/auth/screens/AuthScreen';
 import LoginScreen from '../../features/auth/screens/login/LoginScreen';
 import TwoFactorScreen from '../../features/auth/screens/two-factor/TwoFactorScreen';
 import SignupScreen from '../../features/auth/screens/signup/SignupScreen';
-import BiometricAuth from '../../core/components/BiometricAuth';
 
 const Stack = createNativeStackNavigator<AuthStackParamList>();
 
 const AuthStack = () => {
   return (
-    <Stack.Navigator initialRouteName={routes.BioAuth}>
-      <Stack.Screen
-        name={routes.BioAuth}
-        component={BiometricAuth}
-        options={{
-          headerShown: false,
-        }}
-      />
+    <Stack.Navigator initialRouteName={routes.Auth}>
       <Stack.Screen
         name={routes.Auth}
         component={AuthScreen}

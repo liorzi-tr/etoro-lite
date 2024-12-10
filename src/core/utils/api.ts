@@ -1,8 +1,8 @@
 // api.ts
 import axios, { InternalAxiosRequestConfig } from 'axios';
-import AuthService from '../services/AuthService';
 import { getDeviceIdFromLocalStorage, setDeviceId } from './storage';
 import { getDeviceId } from './getDeviceId';
+import { getSecureData } from '../../features/auth/utils/secureStore';
 
 export interface InterceptorConfig {
   addHeaders?: {
@@ -35,22 +35,22 @@ const axiosInstance = axios.create({
 
 // Request interceptor to add headers
 axiosInstance.interceptors.request.use(
- async (config: CustomAxiosRequestConfig) => {
+  async (config: CustomAxiosRequestConfig) => {
     const interceptorConfig = config.interceptorConfig;
 
     if (interceptorConfig?.addHeaders) {
       const { addHeaders } = interceptorConfig;
 
       if (addHeaders.twoFactorAuthentication) {
-        const addHeader = await AuthService.getTwoFactorToken();
+        const addHeader = await getSecureData('twoFactorToken');
         console.log('twoFactorToken', addHeader);
 
         config.headers['Authorization'] = addHeader;
       }
 
-      if(addHeaders.authenticationToken) {
+      if (addHeaders.authenticationToken) {
         console.log('Adding authentication token');
-        const addHeader = await AuthService.getRefreshToken();
+        const addHeader = await getSecureData('refreshToken');
         console.log('refreshToken', addHeader);
 
         config.headers['Authorization'] = addHeader;
@@ -58,7 +58,7 @@ axiosInstance.interceptors.request.use(
 
       if (addHeaders.auhtorization) {
         console.log('Adding authorization header');
-        const authHeader = await AuthService.getAccessToken();
+        const authHeader = await getSecureData('accessToken');
         console.log('token', authHeader);
 
 

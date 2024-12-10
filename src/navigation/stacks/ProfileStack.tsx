@@ -33,14 +33,15 @@ export default function ProfileStack() {
         component={AccountScreen}
         options={
           {
-            title: 'Account',
+            title: '',
             headerStyle: {
               backgroundColor: theme.topBackgroundColor,
             },
-            headerTintColor: 'white',
+            headerTintColor: theme.textColor,
             headerTitleStyle: {
               fontWeight: 'bold',
             },
+            headerBackButtonDisplayMode: 'minimal',
           }
         }
       />

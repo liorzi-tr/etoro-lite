@@ -1,10 +1,9 @@
-// authSlice.ts
+
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import AuthService from '../../core/services/AuthService';
 import { setTwoFactorRequired } from './twoFactorSlice';
 import loginSerivce from '../../core/services/LoginSerivce';
 import { Credentials, isLoginMissingScopes, isTwoFactorResponse, LoginResponse } from '../../features/auth/types';
-import { getSecureData, saveSecureData } from '../../core/utils/secureStore';
+import { deleteSecureData, getSecureData } from '../../features/auth/utils/secureStore';
 
 interface AuthState {
   isAuthenticated: boolean;
@@ -18,54 +17,42 @@ const initialState: AuthState = {
   error: null,
 };
 
-// Async thunk to check authentication on app startup
 export const checkAuthentication = createAsyncThunk(
   'auth/checkAuthentication',
-  async (any, {dispatch}) => {
-    const accessToken = await AuthService.getAccessToken();
+  async (_: any, { dispatch }) => {
+    const accessToken = await getSecureData('accessToken');
     if (accessToken) {
-      console.log('setting authenticated true');
       dispatch(setAuthenticatedTrue());
     }
     else if (!accessToken) {
-      const refreshToken = await AuthService.getRefreshToken();
+      const refreshToken = await getSecureData('refreshToken');
       if (refreshToken) {
         await loginSerivce.refreshToken();
-        console.log('setting authenticated true');
-
         dispatch(setAuthenticatedTrue());
       }
     }
     else {
-      console.log('setting authenticated false');
-
-      dispatch(logout());
+      dispatch(setAuthenticatedFalse());
     }
   }
 );
 
-
-// Async thunk for login
 export const login = createAsyncThunk(
   'auth/login',
   async (credentials: Credentials, { rejectWithValue, dispatch }) => {
     try {
       const data: LoginResponse = await loginSerivce.authenticateUserBeforeLogin(credentials);
-      // Handle two-factor authentication or missing scopes if needed
+
       if (isTwoFactorResponse(data)) {
-        // Handle two-factor authentication
-        // You may need to dispatch another action or update the state accordingly
         dispatch(setTwoFactorRequired(data));
         return rejectWithValue('Two-factor authentication required');
       }
 
       if (isLoginMissingScopes(data)) {
-        // Handle missing scopes
         return rejectWithValue('Permissions required');
       }
 
       await loginSerivce.refreshToken(data);
-      await saveSecureData('token', data.token.jwt);
       return true;
     } catch (error: any) {
       return rejectWithValue(error.message || 'Login failed');
@@ -73,33 +60,20 @@ export const login = createAsyncThunk(
   },
 );
 
-export const authenticateWithBiometrics = createAsyncThunk(
-  'auth/authenticateWithBiometrics',
+export const logout = createAsyncThunk(
+  'auth/logout',
   async (_, { dispatch }) => {
-    const isBiometricAvailable = await AuthService.isBiometricAvailable();
-    if (!isBiometricAvailable) {
-      throw new Error('Biometric authentication is not available');
-    }
-
-    const biometricAuthResult = await AuthService.authenticateBiometrically();
-    if (biometricAuthResult) {
-      dispatch(setAuthenticatedTrue());
-    } else {
-      throw new Error('Biometric authentication failed');
-    }
+    dispatch(setAuthenticatedFalse());
+    await deleteSecureData('accessToken');
+    await deleteSecureData('refreshToken');
+    await deleteSecureData('deviceToken');
   }
 );
 
-
-// Slice
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    logout(state) {
-      state.isAuthenticated = false;
-      AuthService.clearTokens();
-    },
     setAuthenticatedTrue(state) {
       state.isAuthenticated = true;
     },
@@ -130,10 +104,13 @@ const authSlice = createSlice({
         state.status = 'failed';
         state.error = action.payload as string;
         state.isAuthenticated = false;
+      })
+      .addCase(logout.fulfilled, (state) => {
+        state.isAuthenticated = false;
       });
   },
 });
 
-export const { logout, setAuthenticatedTrue, setAuthenticatedFalse } = authSlice.actions;
+export const { setAuthenticatedTrue, setAuthenticatedFalse } = authSlice.actions;
 
 export default authSlice.reducer;
