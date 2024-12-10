@@ -15,7 +15,7 @@ import { AuthRouteProp, AuthStackProp } from '../../../navigation/params';
 import { useEffect, useState } from 'react';
 import { isBiometricSupported } from '../utils/biometic';
 import BiometricButton from '../components/BiometricButton';
-import { showBiometricPrompt } from '../services/BiometricLoginService';
+import { loginWithBiometric } from '../services/BiometricLoginService';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../../store/store';
 
@@ -36,7 +36,7 @@ export default function AuthScreen() {
 
   const onUseBiometric = async (): Promise<void> => {
     console.log('onUseBiometric');
-    await showBiometricPrompt(dispatch, navigation);
+    await loginWithBiometric(dispatch, navigation);
   };
 
   return (

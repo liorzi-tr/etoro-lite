@@ -6,9 +6,9 @@ import { LoginDataResponse } from '../../../core/@etoro/types/login-data';
 import { useSelector } from "react-redux";
 import Loader from "../../../core/components/Loader";
 import { selectTheme } from "../../../store/selectors/themeSelectors";
-import { MainTabParamList } from "../../../navigation/types";
 import renderMirrorItem from "../../user-profile/components/miroritem";
 import { routes } from "../../../core/constants/routes";
+import { MainBottomTabParamList } from "../../../navigation/types";
 // TypeScript Interfaces
 interface Position {
   PositionID: number;
@@ -73,7 +73,7 @@ const sampleMirrors: Mirror[] = [
   },
 ];
 
-export default function PortfolioScreen({ navigation }: MainTabParamList["Portfolio"]) {
+export default function PortfolioScreen({ navigation }: MainBottomTabParamList["Portfolio"]) {
     const  queryClient = useQueryClient();
     const theme = useSelector(selectTheme);
 

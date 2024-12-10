@@ -41,6 +41,34 @@ export interface LoginSuccessResponse {
   deviceToken?: string;
 }
 
+export interface SignatureData {
+  keyData: {
+    keyAlgorithm: string;
+    keyParameters: string[];
+    publicKey: string;
+  },
+  hashData: {
+    hashAlgorithm: string;
+  }
+}
+
+export interface PublicKeyData {
+  signatureData: SignatureData;
+  message: string;
+  signedMessage: string;
+}
+
+export interface EnrollmentResponse {
+  enrollmentData: {
+    deviceToken: DeviceToken;
+  }
+}
+
+export interface DeviceToken {
+  token: string;
+  expiresOn: string;
+}
+
 export type LoginResponse = TwoFactorResponse | LoginSuccessResponse;
 
 export const isTwoFactorResponse = (data: LoginResponse): data is TwoFactorResponse => {

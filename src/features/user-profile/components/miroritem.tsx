@@ -19,7 +19,7 @@ export  default function renderMirrorItem({ item, onPress }: RenderItemProps) {
             height: 50,
             borderRadius:8,
             borderWidth:  instrument.IsMarketOpen?1:0,
-            borderColor:'#00ff00'
+            borderColor:'transparent'
         }
         }
         source={{uri:item.instrument.Images[0].Uri}}/>
@@ -30,7 +30,7 @@ export  default function renderMirrorItem({ item, onPress }: RenderItemProps) {
             gap:5,
         }}>
 
-        <Text style={styles.instrumentName}>{instrument.InstrumentDisplayName}</Text>
+        {/* <Text style={styles.instrumentName}>{instrument.InstrumentDisplayName}</Text> */}
         <Text style={styles.symbolText}>{instrument.SymbolFull}</Text>
         </View>
       </View>
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3,
     flexDirection:'row',
-    minHeight: 130,
+    // minHeight: 130,
   },
   header: {
     flexDirection: 'row',
@@ -80,12 +80,13 @@ const styles = StyleSheet.create({
     flex:1,
     alignItems:'center',
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'center',
+    gap: 20,
     paddingVertical: 8,
     alignContent:'space-around',
   },
   detailText: {
-    fontSize: 14,
+    fontSize: 18,
     color: '#444',
   },
   marketStatus: {

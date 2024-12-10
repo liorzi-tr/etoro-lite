@@ -81,14 +81,14 @@ const HomeScreen = () => {
       });
 
       // Set up an interval to refetch data every 5 seconds
-      const intervalId = setInterval(() => {
-        if (user) {
-          fetchEquityData(user); // Fetch equity data periodically if user is available
-        }
-      }, 5000);
+      // const intervalId = setInterval(() => {
+      //   if (user) {
+      //     fetchEquityData(user); // Fetch equity data periodically if user is available
+      //   }
+      // }, 5000);
 
-      // Cleanup interval on component unmount
-      return () => clearInterval(intervalId);
+      // // Cleanup interval on component unmount
+      // return () => clearInterval(intervalId);
     }, [user]);
 
   const [timeRange, setTimeRange] = useState("1W"); // Default to 1 week
