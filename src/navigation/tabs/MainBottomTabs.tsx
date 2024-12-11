@@ -1,14 +1,15 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Image, StatusBar, StyleSheet } from "react-native";
+import { selectTheme } from "../../store/selectors/themeSelectors";
+import { useSelector } from "react-redux";
+import { routes } from "../../core/constants/routes";
+import { MainBottomTabParamList } from "../types";
 import TabIcon from "../../core/components/TabIcon";
 import TabLabel from "../../core/components/TabLabel";
 import ProfileStackNav from "../stacks/ProfileStack";
-import { selectTheme } from "../../store/selectors/themeSelectors";
-import { useSelector } from "react-redux";
 import HomeScreen from "../../features/home/screens/HomeScreen";
 import Portfolio from "../../features/portfolio/screens/PortfolioScreen";
-import { routes } from "../../core/constants/routes";
-import { MainBottomTabParamList } from "../types";
+import WatchlistScreen from "../../features/watchlist/screens/WatchlistScreen";
 
 const Tab = createBottomTabNavigator<MainBottomTabParamList>();
 
@@ -55,6 +56,22 @@ export default function MainBottomTabs() {
               <TabIcon focused={focused} icon={'home'} />
             ),
             tabBarLabel: ({ focused }) => <TabLabel focused={focused} label="Home" />,
+          }}
+        ></Tab.Screen>
+        <Tab.Screen
+          name={routes.Watchlist}
+          component={WatchlistScreen}
+          options={{
+            headerTitle(props) {
+              return <Image style={styles.logo} source={require('../../../assets/images/etoro-logo.png')} />;
+            },
+            headerTitleStyle: {
+              color: theme.textColor,
+            },
+            tabBarIcon: ({ focused }: any) => (
+              <TabIcon focused={focused} icon={'watchlist'} hasFill={true} fill={'gray'} />
+            ),
+            tabBarLabel: ({ focused }) => <TabLabel focused={focused} label="Watchlist" />,
           }}
         ></Tab.Screen>
         <Tab.Screen

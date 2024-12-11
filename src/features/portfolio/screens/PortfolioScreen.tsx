@@ -1,93 +1,31 @@
-import { FlatList, StyleSheet, View,Text } from "react-native";
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { fetchInstruments, ResultInstrument } from '../../../core/services/instrumentsRepo';
-import  fetchLoginData from '../../../core/services/loginData/LoginDataService';
-import { LoginDataResponse } from '../../../core/@etoro/types/login-data';
-import { useSelector } from "react-redux";
-import Loader from "../../../core/components/Loader";
-import { selectTheme } from "../../../store/selectors/themeSelectors";
-import renderMirrorItem from "../../user-profile/components/miroritem";
-import { routes } from "../../../core/constants/routes";
-import { MainBottomTabParamList } from "../../../navigation/types";
-// TypeScript Interfaces
-interface Position {
-  PositionID: number;
-  CID: number;
-  OpenDateTime: string;
-  OpenRate: number;
-  InstrumentID: number;
-  IsBuy: boolean;
-  TakeProfitRate: number;
-  StopLossRate: number;
-  Amount: number;
-  Leverage: number;
-  Units: number;
-  TotalFees: number;
-  InitialAmountInDollars: number;
-  IsSettled: boolean;
-}
+import { FlatList, StyleSheet, View, Text } from 'react-native';
+import { useSelector } from 'react-redux';
+import Loader from '../../../core/components/Loader';
+import { selectTheme } from '../../../store/selectors/themeSelectors';
+import { routes } from '../../../core/constants/routes';
+import { useCallback } from 'react';
+import MirrorItem from '../components/MirrorItem';
+import { useNavigation } from '@react-navigation/native';
+import { getPortfolioData } from '../services/PortfolioService';
+import { useQuery } from '@tanstack/react-query';
+import { PositionGroup } from '../types';
 
-interface Mirror {
-  MirrorID: number;
-  CID: number;
-  ParentCID: number;
-  StopLossPercentage: number;
-  IsPaused: boolean;
-  CopyExistingPositions: boolean;
-  AvailableAmount: number;
-  StopLossAmount: number;
-  InitialInvestment: number;
-  Positions: Position[];
-}
+export default function PortfolioScreen() {
+  const theme = useSelector(selectTheme);
+  const navigation = useNavigation<any>();
+  const { isLoading, error, data } = useQuery<PositionGroup[], Error>({
+    queryKey: ['portfolioData'],
+    queryFn: getPortfolioData,
+  });
 
-// Sample Data
-const sampleMirrors: Mirror[] = [
-  {
-    MirrorID: 1,
-    CID: 123,
-    ParentCID: 456,
-    StopLossPercentage: 5,
-    IsPaused: false,
-    CopyExistingPositions: true,
-    AvailableAmount: 1000,
-    StopLossAmount: 50,
-    InitialInvestment: 2000,
-    Positions: [
-      {
-        PositionID: 1,
-        CID: 123,
-        OpenDateTime: "2024-12-01T12:00:00Z",
-        OpenRate: 602.55,
-        InstrumentID: 101,
-        IsBuy: true,
-        TakeProfitRate: 700,
-        StopLossRate: 550,
-        Amount: 8000,
-        Leverage: 2,
-        Units: 100,
-        TotalFees: 15,
-        InitialAmountInDollars: 5000,
-        IsSettled: false,
-      },
-    ],
-  },
-];
-
-export default function PortfolioScreen({ navigation }: MainBottomTabParamList["Portfolio"]) {
-    const  queryClient = useQueryClient();
-    const theme = useSelector(selectTheme);
-
-    const {isLoading,error,data} = useQuery({queryKey:['instrumentMeta'], queryFn:async ()=>{
-        const [instruments, loginData] = await Promise.all([
-            fetchInstruments(),
-            fetchLoginData()
-          ]);
-          return groupPositionsWithInstruments(loginData, instruments);}, })
+  const handleInstrumentPress = useCallback((instrumentSymbol: string) => {
+    navigation.navigate(routes.MarketPage, { instrument: instrumentSymbol });
+  }, [navigation]);
 
   if (isLoading) {
     return (
       <View style={styles.loaderContainer}>
-        <Loader  />
+        <Loader />
       </View>
     );
   }
@@ -99,19 +37,23 @@ export default function PortfolioScreen({ navigation }: MainBottomTabParamList["
       </View>
     );
   }
+
   return (
     <>
-
-    <FlatList
-      data={data}
-      renderItem={(item)=>renderMirrorItem({item:item.item,
-        onPress:()=> navigation.navigate(routes.MarketPage, { instrument:item.item.instrument.SymbolFull })})}
-      keyExtractor={(mirror) => mirror.instrument.InstrumentID.toString()}
-      contentContainerStyle={[styles.container, { backgroundColor: theme.topBackgroundColor }]}
-    />
+      <FlatList
+        data={data}
+        renderItem={({ item }) =>
+          <MirrorItem
+            item={item}
+            onPress={() => handleInstrumentPress(item.instrument.SymbolFull)}
+          />
+        }
+        keyExtractor={(mirror) => mirror.instrument.InstrumentID.toString()}
+        contentContainerStyle={[styles.container, { backgroundColor: theme.topBackgroundColor }]}
+      />
     </>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -119,33 +61,33 @@ const styles = StyleSheet.create({
   },
 
   row: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: 8,
     paddingVertical: 8,
     borderBottomWidth: 1,
-    borderBottomColor: "#eee",
+    borderBottomColor: '#eee',
   },
   leftColumn: {
-    flexDirection: "column",
+    flexDirection: 'column',
     flex: 2,
   },
   name: {
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   details: {
     fontSize: 14,
-    color: "#555",
+    color: '#555',
   },
   rightColumns: {
-    flexDirection: "row",
+    flexDirection: 'row',
     flex: 3,
-    justifyContent: "space-around",
+    justifyContent: 'space-around',
   },
   column: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     flex: 1,
   },
   text: {
@@ -165,33 +107,3 @@ const styles = StyleSheet.create({
     color: 'red',
   },
 });
-export interface  PositionGroup {
-    instrument: ResultInstrument;
-    positions: Position[];
-    totalUnits: number;
-  }
-export const groupPositionsWithInstruments = (
-    loginData: LoginDataResponse,
-    instruments: {[key: number]: ResultInstrument}
-  ): PositionGroup[] => {
-    const groupedPositions: {[key: number]: PositionGroup} = {};
-
-    // Group positions by InstrumentID and add instrument data
-    loginData.AggregatedResult?.ApiResponses?.PrivatePortfolio?.Content.ClientPortfolio?.Positions.forEach(position => {
-      const instrumentId = position.InstrumentID;
-      const instrument = instruments[instrumentId];
-
-      if (!groupedPositions[instrumentId]) {
-        groupedPositions[instrumentId] = {
-          instrument,
-          positions: [],
-          totalUnits: 0
-        };
-      }
-
-      groupedPositions[instrumentId].positions.push(position);
-      groupedPositions[instrumentId].totalUnits += position.Amount;
-    });
-
-    return Object.values(groupedPositions);
-  };

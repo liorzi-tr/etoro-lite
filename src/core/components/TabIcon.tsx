@@ -6,9 +6,12 @@ import { selectTheme } from '../../store/selectors/themeSelectors';
 interface TabIconProps {
   focused: boolean;
   icon: any;
+  size?: number;
+  hasFill?: boolean;
+  fill?: string;
 }
 
-export default function TabIcon({ focused, icon }: TabIconProps) {
+export default function TabIcon({ focused, icon, size = 32, hasFill = false, fill = 'none' }: TabIconProps) {
   const theme = useSelector(selectTheme);
 
   return (
@@ -19,13 +22,15 @@ export default function TabIcon({ focused, icon }: TabIconProps) {
       }}
     >
       <EtoroIcon
+        hasFill={hasFill}
         iconName={icon}
-        size={32}
+        size={size}
         color={
           focused
             ? theme.primaryColor
             : theme.textInfoColor
         }
+        fill={fill}
       />
     </View>
   );

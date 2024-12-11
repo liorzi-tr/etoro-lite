@@ -25,4 +25,5 @@ export type MainBottomTabParamList = {
   Profile: any;
   Portfolio: any;
   Account: any;
+  Watchlist: any;
 };

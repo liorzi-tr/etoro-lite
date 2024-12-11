@@ -25,6 +25,8 @@ interface EtoroIconProps {
   iconName: string;
   color?: string;
   size?: number;
+  hasFill?: boolean;
+  fill?: string;
 }
 
 const icons: any = {
@@ -51,12 +53,12 @@ const icons: any = {
   fingerPrint: Fingerprint
 };
 
-export default function EtoroIcon({ iconName, color, size }: EtoroIconProps) {
+export default function EtoroIcon({ iconName, color, size, hasFill, fill }: EtoroIconProps) {
   const Icon: any = icons[iconName];
 
   if (!Icon) {
     return null;
   }
 
-  return <Icon size={size} color={color} />;
+  return <Icon size={size} color={color} hasFill={hasFill} fill={fill} />;
 }

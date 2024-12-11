@@ -1,15 +1,17 @@
-import React from 'react';
-import { Svg, G, Path, Line } from 'react-native-svg';
+import { Svg, G, Path } from 'react-native-svg';
+import { useSelector } from 'react-redux';
+import { selectTheme } from '../../src/store/selectors/themeSelectors';
 
-const Watchlist = ({ size = 24, color = 'gray', hasFill = false, fill = 'none' }) => (
-  <Svg width={size} height={size} viewBox="0 0 24 24">
-    <G fill={hasFill ? fill : 'none'} stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <Path d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z" />
-      <Line x1="9" y1="8" x2="15" y2="8" />
-      <Line x1="9" y1="12" x2="15" y2="12" />
-      <Line x1="9" y1="16" x2="15" y2="16" />
-    </G>
-  </Svg>
-);
+const Watchlist = ({ size = 24, color = 'gray', hasFill = false, fill = 'none' }) => {
+  const theme = useSelector(selectTheme);
+
+  return (
+    <Svg width={size} height={size} viewBox="0 0 24 24">
+      <G fill={hasFill ? fill : 'none'} stroke={color} strokeWidth="0.1" strokeLinecap="round" strokeLinejoin="round">
+        <Path fill={color ? color : theme.textInfoColor} d="M3 16h5.2q-.4.55-.737 1.175T6.825 18.5q.3.7.638 1.325T8.2 21H5q-.825 0-1.412-.587T3 19zm0-2V9h8v4.325q-.25.15-.488.313T10.05 14zm10-5h8v4.325q-1.1-.65-2.337-.987T16 12q-.8 0-1.55.113t-1.45.312zM3 7V5q0-.825.588-1.412T5 3h14q.825 0 1.413.588T21 5v2zm13 16q-2.275 0-4.2-1.2T9 18.5q.875-2.1 2.8-3.3T16 14t4.2 1.2t2.8 3.3q-.875 2.1-2.8 3.3T16 23m0-2q1.05 0 1.775-.725T18.5 18.5t-.725-1.775T16 16t-1.775.725T13.5 18.5t.725 1.775T16 21m0-1q-.625 0-1.063-.437T14.5 18.5t.438-1.062T16 17t1.063.438t.437 1.062t-.437 1.063T16 20" />
+      </G>
+    </Svg>
+  );
+};
 
 export default Watchlist;
